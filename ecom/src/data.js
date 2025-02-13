@@ -1,17 +1,37 @@
-
-export const products = [
+// data.js
+export default {
+  colors: {
+    primary: "#ffffff",
+    secondary: "#333333",
+    tertiary: "#999999",
+    quaternary: "#f4f4f4",
+  },
+  shopCategories: [
     {
-      id: 1,
-      name: 'Ürün1',
-      price: '1111',
-      image: '',
-      description: 'ürün aciklama',
-      discount: "111",
+      name: "Kadın",
+      subcategories: [
+        { name: "Elbise", link: "/category/women/dress" },
+        { name: "Ayakkabı", link: "/category/women/shoes" },
+      ],
     },
-  ];
-  export const sliderImages = [
-    '',
-  ];
-  export const logo = [
-    '',
-  ];
+    {
+      name: "Erkek",
+      subcategories: [
+        { name: "Pantolon", link: "/category/men/pants" },
+        { name: "Gömlek", link: "/category/men/shirt" },
+      ],
+    },
+    {
+      name: "Çocuk",
+      subcategories: [
+        { name: "Tişört", link: "/category/kids/tshirt" },
+        { name: "Şapka", link: "/category/kids/hat" },
+      ],
+    },
+  ],
+  contact: {
+    phone: "(123) 456-7890",
+    email: "info@shop.com",
+    campaign: "Şu anki kampanyalarımızı keşfedin!",
+  },
+};
