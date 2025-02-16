@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import data from "../../data"; // Data dosyasını import ediyoruz
+import data from "../../data";
 import { FaUser, FaSearch, FaShoppingCart, FaBars, FaInstagram, FaTwitter, FaYoutube, FaFacebook } from "react-icons/fa"; // React Icons
 
 const Header = () => {
@@ -11,22 +11,20 @@ const Header = () => {
   const { shopCategories } = data; // Kategoriler
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50">
+<header className="sm:fixed sm:top-0 sm:left-0 sm:w-full sm:z-50 relative">
+
       {/* Yeni Üst Bölüm */}
       <div
         style={{ backgroundColor: secondary, color: tertiary }}
         className="hidden sm:flex justify-between items-center p-2 text-sm"
       >
         <div className="flex space-x-8">
-          {/* Telefon Numarası */}
           <div>
             <span>Telefon: {phone}</span>
           </div>
-          {/* Mail */}
           <div>
             <span>Email: {email}</span>
           </div>
-          {/* Kampanya */}
           <div>
             <span>{campaign}</span>
           </div>
@@ -64,7 +62,7 @@ const Header = () => {
             Home
           </a>
 
-          {/* Shop menüsünü açılır hale getirdik */}
+          {/* Shop menüsünü*/}
           <div className="relative">
             <button
               onClick={() => setShopMenuActive(!shopMenuActive)}
