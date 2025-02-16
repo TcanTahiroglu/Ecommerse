@@ -40,7 +40,7 @@
       "subtitle": "Summer 2025",
       "description": "Discover the latest trends and be the first to wear the summer collection!",
       "buttonText": "Shop Now",
-      "images":"/dummy_1440x720.png"
+      "images": "/dummy_1440x720.png"
     },
     {
       "id": 2,
@@ -48,8 +48,74 @@
       "subtitle": "Summer 2025",
       "description": "Step into summer with our exclusive collection of stylish outfits.",
       "buttonText": "Shop Now",
-      "images":"/dummy_1440x720.png"
+      "images": "/dummy_1440x720.png"
     }
-    
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "Stylish Jacket",
+      "department": "Men's Fashion",
+      "price": "$49.99",
+      "image": "/images/dummy_240x430.png"
+    },
+    {
+      "id": 2,
+      "name": "Casual Sneakers",
+      "department": "Men's Shoes",
+      "price": "$59.99",
+      "image": "/images/dummy_240x430.png"
+    },
+    {
+      "id": 3,
+      "name": "Elegant Dress",
+      "department": "Women's Fashion",
+      "price": "$69.99",
+      "image": "/images/dummy_240x430.png"
+    },
+    {
+      "id": 4,
+      "name": "Leather Handbag",
+      "department": "Accessories",
+      "price": "$39.99",
+      "image": "/images/dummy_240x430.png"
+    },
+    {
+      "id": 5,
+      "name": "Smart Watch",
+      "department": "Tech Gadgets",
+      "price": "$129.99",
+      "image": "/images/dummy_240x430.png"
+    },
+    {
+      "id": 6,
+      "name": "Running Shoes",
+      "department": "Sportswear",
+      "price": "$79.99",
+      "image": "/images/dummy_240x430.png"
+    }
+  ],"featuredPosts": [
+    {
+      "id": 1,
+      "image": "/images/dummy_240x430.png",
+      "title": "The Future of Fashion",
+      "description": "Explore the latest trends that define modern elegance.",
+      "date": "February 16, 2025"
+    },
+    {
+      "id": 2,
+      "image": "/images/dummy_240x430.png",
+      "title": "Timeless Style Tips",
+      "description": "How to create a wardrobe that never goes out of fashion.",
+      "date": "January 28, 2025"
+    },
+    {
+      "id": 3,
+      "image": "/images/dummy_240x430.png",
+      "title": "Sustainable Trends",
+      "description": "Eco-friendly fashion choices for a greener future.",
+      "date": "March 5, 2025"
+    }
   ]
+
 }
