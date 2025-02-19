@@ -151,7 +151,12 @@
     },
     {
       "name": "Gökalp Kanlı",
-      "role": "I.T",
+      "role": "I.T. Manager",
+      "image": "/images/dummy_350x300.png"
+    },
+    {
+      "name": "Aygün Şen",
+      "role": "Public Relations Specialist",
       "image": "/images/dummy_350x300.png"
     }
   ]
