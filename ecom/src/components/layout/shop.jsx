@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from "react"; // React ve useState, useEffect import ediliyor
-import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../actions/productActions"; // fetchProducts action'ını import et
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import data from "../../data.json";
 
 const ITEMS_PER_PAGE = 12;
 
 const Shop = () => {
-  const dispatch = useDispatch();
-  const { products, total, isLoading } = useSelector((state) => state.product);
+  const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    dispatch(fetchProducts());  // Ürünleri çek
-  }, [dispatch]);
+    setProducts(data.products);
+  }, []);
 
   const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
@@ -30,10 +28,6 @@ const Shop = () => {
     }
   };
 
-  if (isLoading) {
-    return <div className="spinner">Loading...</div>;  // Loading spinner'ı
-  }
-
   return (
     <div className="max-w-6xl mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Ürünler</h1>
@@ -44,7 +38,7 @@ const Shop = () => {
             className="flex items-center p-4 border rounded-lg shadow-md"
           >
             <img
-              src={product.image}
+              src={product.image} // Görseli data.json'dan alıyoruz
               alt={product.name}
               className="w-24 h-24 object-cover mr-4"
             />
@@ -53,7 +47,7 @@ const Shop = () => {
               <p className="text-gray-600">{product.department}</p>
               <p className="text-green-600 font-bold">{product.price}</p>
               <Link
-                to={`/product/${product.id}`}
+                to={`/product/${product.id}`} // Ürün detay sayfasına yönlendirme
                 className="text-blue-500 hover:underline"
               >
                 Detaylar
