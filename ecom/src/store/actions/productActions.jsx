@@ -1,6 +1,6 @@
-<<<<<<< HEAD
 // actions/productActions.js
 
+// Ürünleri API'den çekme eylemi
 export const fetchProducts = () => async (dispatch) => {
   dispatch(setFetchState(true));  // Loading spinner'ı başlat
 
@@ -16,7 +16,8 @@ export const fetchProducts = () => async (dispatch) => {
     dispatch(setFetchState(false));  // Loading spinner'ı durdur
   }
 };
-=======
+
+// Diğer eylemler
 export const setCategories = (categories) => ({
   type: 'SET_CATEGORIES',
   payload: categories,
@@ -51,4 +52,3 @@ export const setFilter = (filter) => ({
   type: 'SET_FILTER',
   payload: filter,
 });
->>>>>>> 53788646f71bbd2f86816460fe09050d2c71013b

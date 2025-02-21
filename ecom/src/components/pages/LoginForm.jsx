@@ -1,53 +1,30 @@
-<<<<<<< HEAD
-import React from 'react';
-import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { login } from '../../store/actions/actions'; 
-import { useNavigate } from 'react-router-dom'; // useHistory yerine useNavigate kullanıyoruz
-=======
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { loginUser } from "../../store/actions/clientaction";
+import { loginUser } from "../../store/actions/clientaction"; // loginUser fonksiyonunu kullanıyoruz
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import Gravatar from "react-gravatar";
->>>>>>> 53788646f71bbd2f86816460fe09050d2c71013b
 
 const LoginForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-<<<<<<< HEAD
 
-  const onSubmit = async (data) => {
-    try {
-      // Login işlemi için action dispatch et
-      await dispatch(login(data.email, data.password));
-
-      // Başarılı girişten sonra kullanıcıyı yönlendir
-      navigate('/');
-    } catch (error) {
-      // Hata durumunda konsola loglama
-      console.error('Login failed:', error);
-
-      // Eğer login başarısız olursa, kullanıcıyı login sayfasında tut
-      alert('Login failed! Please check your credentials.');
-=======
+  // Remember me state'i
   const [rememberMe, setRememberMe] = useState(false);
 
+  // Form submit işlemi
   const onSubmit = async (data) => {
     try {
+      // Kullanıcıyı login et
       const user = await dispatch(loginUser(data, rememberMe));
-      navigate(-1);
+      navigate(-1); // Başarılı girişten sonra, önceki sayfaya yönlendir
     } catch (error) {
-      toast.error("Login failed! Please check your credentials.");
->>>>>>> 53788646f71bbd2f86816460fe09050d2c71013b
+      toast.error("Login failed! Please check your credentials."); // Hata durumunda toast mesajı
     }
   };
 
   return (
-<<<<<<< HEAD
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
         <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
@@ -81,7 +58,13 @@ const LoginForm = () => {
           </div>
 
           <div className="form-group flex items-center">
-            <input type="checkbox" id="rememberMe" className="mr-2" />
+            <input 
+              type="checkbox" 
+              id="rememberMe" 
+              checked={rememberMe} 
+              onChange={() => setRememberMe(!rememberMe)} 
+              className="mr-2"
+            />
             <label htmlFor="rememberMe" className="text-sm text-gray-700">Remember me</label>
           </div>
 
@@ -93,39 +76,6 @@ const LoginForm = () => {
           </button>
         </form>
       </div>
-=======
-    <div className="login-form">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            {...register("email", { required: "Email is required" })}
-          />
-          {errors.email && <span>{errors.email.message}</span>}
-        </div>
-
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            {...register("password", { required: "Password is required" })}
-          />
-          {errors.password && <span>{errors.password.message}</span>}
-        </div>
-
-        <div>
-          <input
-            type="checkbox"
-            id="rememberMe"
-            onChange={() => setRememberMe(!rememberMe)}
-          />
-          <label htmlFor="rememberMe">Remember me</label>
-        </div>
-
-        <button type="submit">Login</button>
-      </form>
->>>>>>> 53788646f71bbd2f86816460fe09050d2c71013b
     </div>
   );
 };
