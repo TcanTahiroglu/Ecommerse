@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { loginUser } from "../../store/actions/clientaction"; // loginUser fonksiyonunu kullanıyoruz
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import md5 from "md5"; // Gravatar için md5 hashleme
 
 const LoginForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -22,6 +23,12 @@ const LoginForm = () => {
     } catch (error) {
       toast.error("Login failed! Please check your credentials."); // Hata durumunda toast mesajı
     }
+  };
+
+  // Gravatar URL oluşturma
+  const getGravatarUrl = (email) => {
+    const emailHash = md5(email.toLowerCase().trim());
+    return `https://www.gravatar.com/avatar/${emailHash}?d=mp`;
   };
 
   return (

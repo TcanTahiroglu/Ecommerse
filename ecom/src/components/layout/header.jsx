@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom"; // Link import edildi
 import data from "../../data";
-import { FaUser, FaSearch, FaShoppingCart, FaBars, FaInstagram, FaTwitter, FaYoutube, FaFacebook } from "react-icons/fa";
+import { FaUser, FaSearch, FaShoppingCart, FaBars } from "react-icons/fa";
 
 const Header = () => {
   const [searchActive, setSearchActive] = useState(false);
@@ -40,22 +41,6 @@ const Header = () => {
           <div><span>Email: {email}</span></div>
           <div><span>{campaign}</span></div>
         </div>
-
-        {/* Sosyal Medya İkonları */}
-        <div className="flex space-x-4">
-          <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
-            <FaInstagram className="text-2xl hover:text-tertiary" />
-          </a>
-          <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
-            <FaTwitter className="text-2xl hover:text-tertiary" />
-          </a>
-          <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">
-            <FaYoutube className="text-2xl hover:text-tertiary" />
-          </a>
-          <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
-            <FaFacebook className="text-2xl hover:text-tertiary" />
-          </a>
-        </div>
       </div>
 
       {/* Header */}
@@ -67,7 +52,7 @@ const Header = () => {
 
         {/* Navbar */}
         <div className="flex-1 hidden sm:flex justify-center space-x-6 relative">
-          <a href="/" className="text-sm hover:text-tertiary">Home</a>
+          <Link to="/" className="text-sm hover:text-tertiary">Home</Link>
 
           {/* Shop Menü */}
           <div className="relative">
@@ -82,9 +67,13 @@ const Header = () => {
                       <div className="font-bold text-sm py-2">{category.name}</div>
                       <div className="space-y-2">
                         {category.subcategories.map((subcategory, subIndex) => (
-                          <a key={subIndex} href={subcategory.link} className="block py-2 text-sm hover:text-tertiary">
+                          <Link
+                            key={subIndex}
+                            to="/shop" // Direkt olarak Shop sayfasına yönlendirme
+                            className="block py-2 text-sm hover:text-tertiary"
+                          >
                             {subcategory.name}
-                          </a>
+                          </Link>
                         ))}
                       </div>
                     </div>
@@ -94,10 +83,8 @@ const Header = () => {
             )}
           </div>
 
-          <a href="/about" className="text-sm hover:text-tertiary">About</a>
-          <a href="/blog" className="text-sm hover:text-tertiary">Blog</a>
-          <a href="/contact" className="text-sm hover:text-tertiary">Contact</a>
-          <a href="/pages" className="text-sm hover:text-tertiary">Pages</a>
+          <Link to="/aboutus" className="text-sm hover:text-tertiary">About</Link>
+          <Link to="/contact" className="text-sm hover:text-tertiary">Contact</Link>
         </div>
 
         {/* Profil İkonu ve Hamburger Menü */}
@@ -110,14 +97,14 @@ const Header = () => {
           {/* Profil Dropdown Menü */}
           {profileMenuActive && isLoggedIn && ( // Sadece giriş yapan kullanıcı için gösterilecek
             <div style={{ backgroundColor: menuBackground, color: menuText }} className="absolute top-full right-0 mt-2 p-2 rounded-md">
-              <a href="/profile" className="block py-2 text-sm">Profile</a>
-              <a href="/logout" className="block py-2 text-sm" onClick={() => setIsLoggedIn(false)}>Logout</a>
+              <Link to="/profile" className="block py-2 text-sm">Profile</Link>
+              <button onClick={() => setIsLoggedIn(false)} className="block py-2 text-sm">Logout</button>
             </div>
           )}
           {profileMenuActive && !isLoggedIn && ( // Giriş yapmamışsa Login butonu gösterilir
             <div style={{ backgroundColor: menuBackground, color: menuText }} className="absolute top-full right-0 mt-2 p-2 rounded-md">
-              <a href="/login" className="block py-2 text-sm">Login</a>
-              <a href="/signup" className="block py-2 text-sm">Sign Up</a>
+              <Link to="/login" className="block py-2 text-sm">Login</Link>
+              <Link to="/signup" className="block py-2 text-sm">Sign Up</Link>
             </div>
           )}
 
@@ -149,10 +136,10 @@ const Header = () => {
 
       {/* Mobil Navbar */}
       <div className="sm:hidden mt-4">
-        <a href="/" className="block text-sm py-2">Home</a>
-        <a href="/product" className="block text-sm py-2">Product</a>
-        <a href="/pricing" className="block text-sm py-2">Pricing</a>
-        <a href="/contact" className="block text-sm py-2">Contact</a>
+        <Link to="/" className="block text-sm py-2">Home</Link>
+        <Link to="/shop" className="block text-sm py-2">Shop</Link>
+        <Link to="/aboutus" className="block text-sm py-2">About</Link>
+        <Link to="/contact" className="block text-sm py-2">Contact</Link>
       </div>
 
       {/* Menü (Mobil İçin) */}
