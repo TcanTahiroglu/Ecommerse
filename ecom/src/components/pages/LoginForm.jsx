@@ -1,13 +1,24 @@
+<<<<<<< HEAD
 import React from 'react';
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { login } from '../../store/actions/actions'; 
 import { useNavigate } from 'react-router-dom'; // useHistory yerine useNavigate kullanıyoruz
+=======
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../store/actions/clientaction";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import Gravatar from "react-gravatar";
+>>>>>>> 53788646f71bbd2f86816460fe09050d2c71013b
 
 const LoginForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+<<<<<<< HEAD
 
   const onSubmit = async (data) => {
     try {
@@ -22,10 +33,21 @@ const LoginForm = () => {
 
       // Eğer login başarısız olursa, kullanıcıyı login sayfasında tut
       alert('Login failed! Please check your credentials.');
+=======
+  const [rememberMe, setRememberMe] = useState(false);
+
+  const onSubmit = async (data) => {
+    try {
+      const user = await dispatch(loginUser(data, rememberMe));
+      navigate(-1);
+    } catch (error) {
+      toast.error("Login failed! Please check your credentials.");
+>>>>>>> 53788646f71bbd2f86816460fe09050d2c71013b
     }
   };
 
   return (
+<<<<<<< HEAD
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
         <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
@@ -71,6 +93,39 @@ const LoginForm = () => {
           </button>
         </form>
       </div>
+=======
+    <div className="login-form">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <label>Email:</label>
+          <input
+            type="email"
+            {...register("email", { required: "Email is required" })}
+          />
+          {errors.email && <span>{errors.email.message}</span>}
+        </div>
+
+        <div>
+          <label>Password:</label>
+          <input
+            type="password"
+            {...register("password", { required: "Password is required" })}
+          />
+          {errors.password && <span>{errors.password.message}</span>}
+        </div>
+
+        <div>
+          <input
+            type="checkbox"
+            id="rememberMe"
+            onChange={() => setRememberMe(!rememberMe)}
+          />
+          <label htmlFor="rememberMe">Remember me</label>
+        </div>
+
+        <button type="submit">Login</button>
+      </form>
+>>>>>>> 53788646f71bbd2f86816460fe09050d2c71013b
     </div>
   );
 };
