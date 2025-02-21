@@ -1,153 +1,138 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom"; // Link import edildi
-import data from "../../data";
-import { FaUser, FaSearch, FaShoppingCart, FaBars } from "react-icons/fa";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { FaSearch, FaShoppingCart, FaUser, FaBars } from "react-icons/fa";
+import CategoryDropdown from '../CategoryDropdown';
 
 const Header = () => {
-  const [searchActive, setSearchActive] = useState(false);
-  const [menuActive, setMenuActive] = useState(false);
-  const [shopMenuActive, setShopMenuActive] = useState(false);
-  const [profileMenuActive, setProfileMenuActive] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Giriş durumu için state ekledim
-
-  const { primary, secondary, tertiary, quaternary, menuBackground, menuText } = data.colors;
-  const { phone, email, campaign } = data.contact;
-  const { shopCategories } = data;
-
-  // Arama kutusu dışına tıklanınca kapanmasını sağlamak için useEffect
-  useEffect(() => {
-    const closeSearchOnClickOutside = (e) => {
-      if (!e.target.closest(".search-container")) {
-        setSearchActive(false);
-      }
-    };
-
-    document.addEventListener("click", closeSearchOnClickOutside);
-
-    return () => {
-      document.removeEventListener("click", closeSearchOnClickOutside);
-    };
-  }, []);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
-    <header className="sm:fixed sm:top-0 sm:left-0 sm:w-full sm:z-50 relative">
-      {/* Üst Bölüm */}
-      <div
-        style={{ backgroundColor: secondary, color: tertiary }}
-        className="hidden sm:flex justify-between items-center p-2 text-sm"
-      >
-        <div className="flex space-x-8">
-          <div><span>Telefon: {phone}</span></div>
-          <div><span>Email: {email}</span></div>
-          <div><span>{campaign}</span></div>
+    <header className="w-full bg-white shadow-md">
+      {/* Top Bar */}
+      <div className="hidden md:flex justify-between items-center px-6 py-2 bg-gray-100">
+        <div className="flex space-x-6 text-sm text-gray-600">
+          <span>Phone: +1 234 567 890</span>
+          <span>Email: info@ecommerce.com</span>
+          <span>Free shipping for orders over $50</span>
         </div>
       </div>
 
-      {/* Header */}
-      <div style={{ backgroundColor: primary, color: tertiary }} className="flex items-center justify-between p-3">
-        {/* Logo */}
-        <div className="flex-shrink-0">
-          <div className="text-lg font-bold">Logo</div>
-        </div>
-
-        {/* Navbar */}
-        <div className="flex-1 hidden sm:flex justify-center space-x-6 relative">
-          <Link to="/" className="text-sm hover:text-tertiary">Home</Link>
-
-          {/* Shop Menü */}
-          <div className="relative">
-            <button onClick={() => setShopMenuActive(!shopMenuActive)} className="text-sm hover:text-tertiary">
-              Shop
-            </button>
-            {shopMenuActive && (
-              <div style={{ backgroundColor: menuBackground, color: menuText }} className="absolute top-full left-0 mt-2 p-2 rounded-md w-48">
-                <div className="flex space-x-4">
-                  {shopCategories.map((category, index) => (
-                    <div key={index} className="w-1/3">
-                      <div className="font-bold text-sm py-2">{category.name}</div>
-                      <div className="space-y-2">
-                        {category.subcategories.map((subcategory, subIndex) => (
-                          <Link
-                            key={subIndex}
-                            to="/shop" // Direkt olarak Shop sayfasına yönlendirme
-                            className="block py-2 text-sm hover:text-tertiary"
-                          >
-                            {subcategory.name}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          <Link to="/aboutus" className="text-sm hover:text-tertiary">About</Link>
-          <Link to="/contact" className="text-sm hover:text-tertiary">Contact</Link>
-        </div>
-
-        {/* Profil İkonu ve Hamburger Menü */}
-        <div className="flex items-center space-x-6 ml-4">
-          {/* Profil Butonu */}
-          <button style={{ backgroundColor: secondary, color: tertiary }} className="p-2 rounded-full" onClick={() => setProfileMenuActive(!profileMenuActive)}>
-            <FaUser />
+      {/* Main Header */}
+      <div className="flex flex-col md:flex-row justify-between items-center px-4 py-4 md:px-6">
+        {/* Logo and Mobile Menu Button */}
+        <div className="flex items-center justify-between w-full md:w-auto">
+          <Link to="/" className="text-xl font-bold text-gray-800">
+            E-Commerce
+          </Link>
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden p-2"
+          >
+            {isMenuOpen ? <FaBars size={24} /> : <FaBars size={24} />}
           </button>
+        </div>
 
-          {/* Profil Dropdown Menü */}
-          {profileMenuActive && isLoggedIn && ( // Sadece giriş yapan kullanıcı için gösterilecek
-            <div style={{ backgroundColor: menuBackground, color: menuText }} className="absolute top-full right-0 mt-2 p-2 rounded-md">
-              <Link to="/profile" className="block py-2 text-sm">Profile</Link>
-              <button onClick={() => setIsLoggedIn(false)} className="block py-2 text-sm">Logout</button>
-            </div>
-          )}
-          {profileMenuActive && !isLoggedIn && ( // Giriş yapmamışsa Login butonu gösterilir
-            <div style={{ backgroundColor: menuBackground, color: menuText }} className="absolute top-full right-0 mt-2 p-2 rounded-md">
-              <Link to="/login" className="block py-2 text-sm">Login</Link>
-              <Link to="/signup" className="block py-2 text-sm">Sign Up</Link>
-            </div>
-          )}
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center space-x-6">
+          <Link to="/" className="text-gray-600 hover:text-gray-900">
+            Home
+          </Link>
+          <CategoryDropdown />
+          <Link to="/shop" className="text-gray-600 hover:text-gray-900">
+            Shop
+          </Link>
+          <Link to="/about" className="text-gray-600 hover:text-gray-900">
+            About
+          </Link>
+          <Link to="/contact" className="text-gray-600 hover:text-gray-900">
+            Contact
+          </Link>
+        </nav>
 
-          {/* Arama Butonu */}
-          <div className="relative search-container">
-            <button onClick={() => setSearchActive(!searchActive)} style={{ backgroundColor: secondary, color: tertiary }} className="p-2 rounded-full">
-              <FaSearch />
-            </button>
-            {searchActive && (
+        {/* Icons */}
+        <div className="hidden md:flex items-center space-x-4">
+          <button
+            onClick={() => setIsSearchOpen(!isSearchOpen)}
+            className="p-2 text-gray-600 hover:text-gray-900"
+          >
+            <FaSearch size={20} />
+          </button>
+          <Link to="/cart" className="p-2 text-gray-600 hover:text-gray-900">
+            <FaShoppingCart size={20} />
+          </Link>
+          <Link to="/profile" className="p-2 text-gray-600 hover:text-gray-900">
+            <FaUser size={20} />
+          </Link>
+        </div>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden w-full">
+            <nav className="flex flex-col space-y-4 mt-4">
+              <Link
+                to="/"
+                className="text-gray-600 hover:text-gray-900 px-4 py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Home
+              </Link>
+              <CategoryDropdown />
+              <Link
+                to="/shop"
+                className="text-gray-600 hover:text-gray-900 px-4 py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Shop
+              </Link>
+              <Link
+                to="/about"
+                className="text-gray-600 hover:text-gray-900 px-4 py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                About
+              </Link>
+              <Link
+                to="/contact"
+                className="text-gray-600 hover:text-gray-900 px-4 py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Contact
+              </Link>
+              <div className="flex space-x-4 px-4 py-2">
+                <button
+                  onClick={() => setIsSearchOpen(!isSearchOpen)}
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  <FaSearch size={20} />
+                </button>
+                <Link to="/cart" className="text-gray-600 hover:text-gray-900">
+                  <FaShoppingCart size={20} />
+                </Link>
+                <Link to="/profile" className="text-gray-600 hover:text-gray-900">
+                  <FaUser size={20} />
+                </Link>
+              </div>
+            </nav>
+          </div>
+        )}
+
+        {/* Search Overlay */}
+        {isSearchOpen && (
+          <div className="absolute top-full left-0 right-0 bg-white shadow-md p-4">
+            <div className="max-w-3xl mx-auto flex">
               <input
                 type="text"
-                placeholder="Arama yap..."
-                style={{ backgroundColor: quaternary, color: primary }}
-                className="absolute left-0 top-full mt-2 p-1 w-40 rounded-md text-sm"
+                placeholder="Search products..."
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-l focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-            )}
+              <button className="px-6 py-2 bg-blue-600 text-white rounded-r hover:bg-blue-700">
+                Search
+              </button>
+            </div>
           </div>
-
-          <button style={{ backgroundColor: secondary, color: tertiary }} className="p-2 rounded-full">
-            <FaShoppingCart />
-          </button>
-
-          {/* Hamburger Menü */}
-          <button onClick={() => setMenuActive(!menuActive)} style={{ backgroundColor: secondary, color: tertiary }} className="p-2 rounded-full sm:hidden">
-            <FaBars />
-          </button>
-        </div>
+        )}
       </div>
-
-      {/* Mobil Navbar */}
-      <div className="sm:hidden mt-4">
-        <Link to="/" className="block text-sm py-2">Home</Link>
-        <Link to="/shop" className="block text-sm py-2">Shop</Link>
-        <Link to="/aboutus" className="block text-sm py-2">About</Link>
-        <Link to="/contact" className="block text-sm py-2">Contact</Link>
-      </div>
-
-      {/* Menü (Mobil İçin) */}
-      {menuActive && (
-        <div style={{ backgroundColor: quaternary, color: primary }} className="absolute top-full right-0 mt-2 p-2 rounded-md sm:hidden">
-          {/* Menü öğeleri boş bırakıldı */}
-        </div>
-      )}
     </header>
   );
 };

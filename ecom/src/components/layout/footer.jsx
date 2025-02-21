@@ -1,82 +1,86 @@
-import React from "react";
-import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white py-12 w-full mt-12">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-wrap justify-between items-start">
-          {/* Sol Taraf - Logo */}
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold">VitaClassic</h2>
+    <footer className="bg-gray-900 text-gray-300">
+      <div className="max-w-7xl mx-auto px-4 py-12">
+        {/* Main Footer Content */}
+        <div className="flex flex-col md:flex-row justify-between space-y-8 md:space-y-0">
+          {/* Company Info */}
+          <div className="flex flex-col space-y-4 md:w-1/4">
+            <h2 className="text-xl font-bold text-white">E-Commerce</h2>
+            <p className="text-sm">
+              Your one-stop shop for all your fashion needs. Quality products at competitive prices.
+            </p>
+            <div className="flex space-x-4">
+              <a href="#" className="hover:text-white">
+                <Facebook size={20} />
+              </a>
+              <a href="#" className="hover:text-white">
+                <Twitter size={20} />
+              </a>
+              <a href="#" className="hover:text-white">
+                <Instagram size={20} />
+              </a>
+            </div>
           </div>
 
-          {/* Sosyal Medya */}
-          <div className="flex space-x-4 mb-6">
-            <a href="#" className="text-gray-400 hover:text-white"><FaFacebookF size={20} /></a>
-            <a href="#" className="text-gray-400 hover:text-white"><FaInstagram size={20} /></a>
-            <a href="#" className="text-gray-400 hover:text-white"><FaTwitter size={20} /></a>
-          </div>
-        </div>
-
-        {/* Footer Link Grupları */}
-        <div className="grid md:grid-cols-5 gap-8 mt-8 text-gray-400 text-sm">
-          <div>
-            <h3 className="text-white font-semibold mb-3">Company Info</h3>
-            <ul>
-              <li className="hover:text-white cursor-pointer">About Us</li>
-              <li className="hover:text-white cursor-pointer">Career</li>
-              <li className="hover:text-white cursor-pointer">We are Hiring</li>
-              <li className="hover:text-white cursor-pointer">Blog</li>
-            </ul>
+          {/* Quick Links */}
+          <div className="flex flex-col space-y-4">
+            <h3 className="text-lg font-semibold text-white">Quick Links</h3>
+            <Link to="/" className="text-sm hover:text-white">Home</Link>
+            <Link to="/shop" className="text-sm hover:text-white">Shop</Link>
+            <Link to="/about" className="text-sm hover:text-white">About Us</Link>
+            <Link to="/contact" className="text-sm hover:text-white">Contact</Link>
           </div>
 
-          <div>
-            <h3 className="text-white font-semibold mb-3">Legal</h3>
-            <ul>
-              <li className="hover:text-white cursor-pointer">About Us</li>
-              <li className="hover:text-white cursor-pointer">Career</li>
-              <li className="hover:text-white cursor-pointer">We are Hiring</li>
-              <li className="hover:text-white cursor-pointer">Blog</li>
-            </ul>
+          {/* Categories */}
+          <div className="flex flex-col space-y-4">
+            <h3 className="text-lg font-semibold text-white">Categories</h3>
+            <Link to="/shop/men" className="text-sm hover:text-white">Men's Fashion</Link>
+            <Link to="/shop/women" className="text-sm hover:text-white">Women's Fashion</Link>
+            <Link to="/shop/kids" className="text-sm hover:text-white">Kids' Fashion</Link>
+            <Link to="/shop/accessories" className="text-sm hover:text-white">Accessories</Link>
           </div>
 
-          <div>
-            <h3 className="text-white font-semibold mb-3">Features</h3>
-            <ul>
-              <li className="hover:text-white cursor-pointer">Business Marketing</li>
-              <li className="hover:text-white cursor-pointer">Use Analytics</li>
-              <li className="hover:text-white cursor-pointer">Live Chat</li>
-              <li className="hover:text-white cursor-pointer">Unlimited Support</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-white font-semibold mb-3">Resources</h3>
-            <ul>
-              <li className="hover:text-white cursor-pointer">iOS & Android</li>
-              <li className="hover:text-white cursor-pointer">Watch a Demo</li>
-              <li className="hover:text-white cursor-pointer">Customers</li>
-              <li className="hover:text-white cursor-pointer">API</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-white font-semibold mb-3">Get in Touch</h3>
-            <div className="flex">
-              <input
-                type="email"
-                placeholder="Your Email"
-                className="p-2 rounded-l-md bg-gray-800 border border-gray-700 text-white outline-none"
-              />
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-r-md">Subscribe</button>
+          {/* Contact Info */}
+          <div className="flex flex-col space-y-4 md:w-1/4">
+            <h3 className="text-lg font-semibold text-white">Contact Us</h3>
+            <div className="flex items-center space-x-2">
+              <MapPin size={16} />
+              <span className="text-sm">123 Fashion Street, City, Country</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Phone size={16} />
+              <span className="text-sm">+1 234 567 890</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Mail size={16} />
+              <span className="text-sm">info@ecommerce.com</span>
             </div>
           </div>
         </div>
 
-        {/* Alt Bilgi */}
-        <div className="text-center text-gray-500 text-sm mt-8 border-t border-gray-700 pt-4">
-          Made with ❤️ by Finland - All Rights Reserved.
+        {/* Bottom Bar */}
+        <div className="mt-12 pt-8 border-t border-gray-800">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <p className="text-sm">
+              {new Date().getFullYear()} E-Commerce. All rights reserved.
+            </p>
+            <div className="flex space-x-6">
+              <Link to="/privacy" className="text-sm hover:text-white">
+                Privacy Policy
+              </Link>
+              <Link to="/terms" className="text-sm hover:text-white">
+                Terms of Service
+              </Link>
+              <Link to="/shipping" className="text-sm hover:text-white">
+                Shipping Info
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

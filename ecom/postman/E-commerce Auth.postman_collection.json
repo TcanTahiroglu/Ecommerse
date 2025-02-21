@@ -1,0 +1,74 @@
+{
+  "info": {
+    "_postman_id": "your-postman-id",
+    "name": "E-commerce Auth",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"customer@commerce.com\",\n    \"password\": \"123456\"\n}"
+        },
+        "url": {
+          "raw": "https://workintech-fe-ecommerce.onrender.com/login",
+          "protocol": "https",
+          "host": ["workintech-fe-ecommerce", "onrender", "com"],
+          "path": ["login"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Categories",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "https://workintech-fe-ecommerce.onrender.com/categories",
+          "protocol": "https",
+          "host": ["workintech-fe-ecommerce", "onrender", "com"],
+          "path": ["categories"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Category By ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "https://workintech-fe-ecommerce.onrender.com/categories/1",
+          "protocol": "https",
+          "host": ["workintech-fe-ecommerce", "onrender", "com"],
+          "path": ["categories", "1"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
