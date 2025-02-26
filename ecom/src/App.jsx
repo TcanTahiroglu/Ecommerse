@@ -39,9 +39,8 @@ function App() {
         <Route path="/teams" element={<TeamPage />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signup" element={<SignupForm />} />
-        <Route path="/products" element={<ProductList />} />
-      </Routes>
-    </PageLayout>
+      </Route>
+    </Routes>
   );
 }
 

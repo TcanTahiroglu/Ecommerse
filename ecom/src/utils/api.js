@@ -6,7 +6,8 @@ const api = axios.create({
   baseURL: 'https://workintech-fe-ecommerce.onrender.com',
   headers: {
     'Content-Type': 'application/json',
-  }
+    'Accept': 'application/json',
+  },
 });
 
 // Request interceptor
@@ -30,8 +31,10 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       // Token geçersiz veya süresi dolmuş
       localStorage.removeItem('token');
-      delete api.defaults.headers.common['Authorization'];
-      store.dispatch(logout());
+      localStorage.removeItem('user');
+      sessionStorage.removeItem('token');
+      sessionStorage.removeItem('user');
+      window.location.href = '/login';
     }
     return Promise.reject(error);
   }

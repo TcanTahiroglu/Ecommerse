@@ -11,14 +11,24 @@ export const loginUser = (credentials, rememberMe = false) => async (dispatch) =
     };
 
     const response = await api.post('/login', loginData);
-    const { token, email, name, role_id } = response.data;
+    console.log('Login response:', response.data);
+    
+    // API'den gelen user bilgisini kontrol et
+    const { token, email, role_id } = response.data;
+    const user = {
+      name: email.split('@')[0], // email'den kullanıcı adını al
+      email,
+      role_id
+    };
 
-    // Token'ı sadece rememberMe true ise localStorage'a kaydet
+    // Token'ı sadece remember me seçiliyse localStorage'a kaydet
     if (rememberMe) {
-      setAuthToken(token);
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
     } else {
-      // Sadece API header'ına ekle
-      api.defaults.headers.common['Authorization'] = token;
+      // Remember me seçili değilse sessionStorage'a kaydet
+      sessionStorage.setItem('token', token);
+      sessionStorage.setItem('user', JSON.stringify(user));
     }
 
     dispatch(loginSuccess({ token, email, name, role_id }));
