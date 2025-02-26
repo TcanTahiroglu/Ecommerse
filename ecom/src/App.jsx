@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { verifyToken } from './store/actions/userActions';
 import PageLayout from './components/layout/PageLayout';
 import HomePage from './components/pages/Homepage';
 import ShopPage from './components/pages/Shoppage';
@@ -12,6 +14,19 @@ import TeamPage from './components/pages/Teampage';
 import ProductList from './components/pages/ProductList';
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // LocalStorage'da token varsa doğrula
+    const token = localStorage.getItem('token');
+    if (token) {
+      dispatch(verifyToken())
+        .catch((error) => {
+          console.error('Token verification failed:', error);
+        });
+    }
+  }, [dispatch]);
+
   return (
     <PageLayout>
       <Routes>
@@ -24,14 +39,9 @@ function App() {
         <Route path="/teams" element={<TeamPage />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signup" element={<SignupForm />} />
-<<<<<<< HEAD
         <Route path="/products" element={<ProductList />} />
-      </Route>
-    </Routes>
-=======
       </Routes>
     </PageLayout>
->>>>>>> parent of 6a04b81 (görsel biraz düzenlendi)
   );
 }
 

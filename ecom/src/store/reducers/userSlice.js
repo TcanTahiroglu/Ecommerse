@@ -19,7 +19,11 @@ const userSlice = createSlice({
     loginSuccess: (state, action) => {
       state.loading = false;
       state.isAuthenticated = true;
-      state.user = action.payload.user;
+      state.user = {
+        email: action.payload.email,
+        name: action.payload.name,
+        role_id: action.payload.role_id
+      };
       state.token = action.payload.token;
       state.error = null;
     },

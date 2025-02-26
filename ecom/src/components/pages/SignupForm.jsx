@@ -187,11 +187,11 @@ const SignupForm = () => {
           <label className="block text-sm font-medium text-gray-700">Name</label>
           <input
             type="text"
-            {...register("name", {
-              required: "Name is required",
-              minLength: { value: 3, message: "Name must be at least 3 characters" }
-            })}
+            id="name"
+            autoComplete="name"
+            {...register("name", { required: "Name is required" })}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            disabled={loading}
           />
           {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>}
         </div>
@@ -201,14 +201,17 @@ const SignupForm = () => {
           <label className="block text-sm font-medium text-gray-700">Email</label>
           <input
             type="email"
+            id="email"
+            autoComplete="email"
             {...register("email", {
               required: "Email is required",
               pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "Invalid email address"
-              }
+                message: "Invalid email address",
+              },
             })}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            disabled={loading}
           />
           {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>}
         </div>
@@ -218,20 +221,17 @@ const SignupForm = () => {
           <label className="block text-sm font-medium text-gray-700">Password</label>
           <input
             type="password"
+            id="password"
+            autoComplete="new-password"
             {...register("password", {
               required: "Password is required",
               minLength: {
-                value: 8,
-                message: "Password must be at least 8 characters"
+                value: 6,
+                message: "Password must be at least 6 characters",
               },
-              validate: {
-                hasUpperCase: value => /[A-Z]/.test(value) || "Must contain at least one uppercase letter",
-                hasLowerCase: value => /[a-z]/.test(value) || "Must contain at least one lowercase letter",
-                hasNumber: value => /\d/.test(value) || "Must contain at least one number",
-                hasSpecialChar: value => /[!@#$%^&*(),.?":{}|<>]/.test(value) || "Must contain at least one special character"
-              }
             })}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            disabled={loading}
           />
           {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>}
           
@@ -239,7 +239,7 @@ const SignupForm = () => {
           <div className="mt-2 text-sm text-gray-600">
             <p className="font-medium mb-1">Password must:</p>
             <ul className="list-disc pl-5 space-y-1">
-              <li>Be at least 8 characters long</li>
+              <li>Be at least 6 characters long</li>
               <li>Include at least one uppercase letter (A-Z)</li>
               <li>Include at least one lowercase letter (a-z)</li>
               <li>Include at least one number (0-9)</li>
@@ -253,13 +253,17 @@ const SignupForm = () => {
           <label className="block text-sm font-medium text-gray-700">Confirm Password</label>
           <input
             type="password"
-            {...register("password_confirmation", {
+            id="confirmPassword"
+            autoComplete="new-password"
+            {...register("confirmPassword", {
               required: "Please confirm your password",
-              validate: value => value === password || "Passwords do not match"
+              validate: (value) =>
+                value === password || "Passwords do not match",
             })}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            disabled={loading}
           />
-          {errors.password_confirmation && <p className="mt-1 text-sm text-red-600">{errors.password_confirmation.message}</p>}
+          {errors.confirmPassword && <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>}
         </div>
 
         {/* Role Selection */}
@@ -285,11 +289,13 @@ const SignupForm = () => {
               <label className="block text-sm font-medium text-gray-700">Store Name</label>
               <input
                 type="text"
+                id="store_name"
+                autoComplete="organization"
                 {...register("store_name", {
-                  required: "Store name is required",
-                  minLength: { value: 3, message: "Store name must be at least 3 characters" }
+                  required: selectedRole === "2" ? "Store name is required" : false,
                 })}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                disabled={loading || selectedRole !== "2"}
               />
               {errors.store_name && <p className="mt-1 text-sm text-red-600">{errors.store_name.message}</p>}
             </div>
@@ -302,16 +308,15 @@ const SignupForm = () => {
                   +90
                 </span>
                 <input
-                  type="text"
+                  type="tel"
+                  id="store_phone"
+                  autoComplete="tel"
                   {...register("store_phone", {
-                    required: "Phone number is required",
-                    pattern: {
-                      value: /^[0-9]{10}$/,
-                      message: "Please enter a valid Turkish phone number"
-                    }
+                    required: selectedRole === "2" ? "Store phone is required" : false,
                   })}
                   placeholder="5XX XXX XXXX"
                   className="mt-0 block w-full rounded-none rounded-r-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  disabled={loading || selectedRole !== "2"}
                 />
               </div>
               {errors.store_phone && <p className="mt-1 text-sm text-red-600">{errors.store_phone.message}</p>}
@@ -322,15 +327,14 @@ const SignupForm = () => {
               <label className="block text-sm font-medium text-gray-700">Tax ID</label>
               <input
                 type="text"
+                id="store_tax_no"
+                autoComplete="off"
                 {...register("store_tax_no", {
-                  required: "Tax ID is required",
-                  pattern: {
-                    value: /^T\d{4}V\d{6}$/,
-                    message: "Tax ID must match pattern TXXXXVXXXXXX (X = number)"
-                  }
+                  required: selectedRole === "2" ? "Tax number is required" : false,
                 })}
                 placeholder="TXXXXVXXXXXX"
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                disabled={loading || selectedRole !== "2"}
               />
               {errors.store_tax_no && <p className="mt-1 text-sm text-red-600">{errors.store_tax_no.message}</p>}
             </div>
@@ -344,15 +348,14 @@ const SignupForm = () => {
                 </span>
                 <input
                   type="text"
+                  id="store_bank_account"
+                  autoComplete="off"
                   {...register("store_bank_account", {
-                    required: "IBAN is required",
-                    pattern: {
-                      value: /^\d{24}$/,
-                      message: "Please enter a valid IBAN (24 digits)"
-                    }
+                    required: selectedRole === "2" ? "Bank account is required" : false,
                   })}
                   placeholder="Enter 24 digits"
                   className="mt-0 block w-full rounded-none rounded-r-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  disabled={loading || selectedRole !== "2"}
                 />
               </div>
               {errors.store_bank_account && <p className="mt-1 text-sm text-red-600">{errors.store_bank_account.message}</p>}

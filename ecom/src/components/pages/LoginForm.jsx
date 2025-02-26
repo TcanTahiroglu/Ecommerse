@@ -54,6 +54,7 @@ const LoginForm = () => {
             <input
               id="email"
               type="email"
+              autoComplete="email"
               {...register('email', {
                 required: 'Email is required',
                 pattern: {
@@ -82,6 +83,7 @@ const LoginForm = () => {
             <input
               id="password"
               type="password"
+              autoComplete="current-password"
               {...register('password', {
                 required: 'Password is required'
               })}
@@ -98,6 +100,7 @@ const LoginForm = () => {
             <input
               type="checkbox"
               id="rememberMe"
+              autoComplete="off"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
               className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
