@@ -5,7 +5,6 @@ export const loginUser = (credentials, rememberMe = false) => async (dispatch) =
   try {
     dispatch(loginStart());
 
-    // API'nin beklediği formatta veri gönderiyoruz
     const loginData = {
       email: credentials.email,
       password: credentials.password
@@ -17,10 +16,8 @@ export const loginUser = (credentials, rememberMe = false) => async (dispatch) =
     
     const { token, user } = response.data;
 
-    // If remember me is checked, save token to localStorage
-    if (rememberMe) {
-      localStorage.setItem('token', token);
-    }
+    // Token'ı localStorage'a kaydet
+    localStorage.setItem('token', token);
 
     dispatch(loginSuccess({ user, token }));
     return response.data;
