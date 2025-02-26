@@ -4,20 +4,36 @@ import api from '../../utils/api';
 import {
   fetchProductsStart,
   fetchProductsSuccess,
-  fetchProductsFailure,
-  setSelectedProduct,
-  clearSelectedProduct
-} from '../reducers/productReducer';
+  fetchProductsFailure
+} from '../reducers/productSlice';
 
-// Fetch all products
+// Fetch all products with pagination and optional query parameters
 export const fetchProducts = (params = {}) => async (dispatch) => {
   try {
     dispatch(fetchProductsStart());
-    const response = await api.get('/products', { params });
-    dispatch(fetchProductsSuccess(response.data));
-    return response.data;
+    // Set default pagination values if not provided
+    const paginatedParams = {
+      limit: params.limit || 25,
+      offset: params.offset || 0,
+      ...params
+    };
+    const response = await api.get('/products', { params: paginatedParams });
+    
+    // API yanıtını işle
+    const products = response.data.products || [];
+    
+    // Toplam ürün sayısını al
+    const total = response.data.total_count || products.length;
+    
+    dispatch(fetchProductsSuccess({
+      products,
+      total,
+      limit: paginatedParams.limit,
+      offset: paginatedParams.offset
+    }));
   } catch (error) {
-    const errorMessage = error.response?.data?.message || 'Failed to fetch products';
+    console.error('API Error:', error);
+    const errorMessage = error.response?.data?.message || 'Ürünler yüklenirken bir hata oluştu';
     dispatch(fetchProductsFailure(errorMessage));
     throw error;
   }
@@ -28,10 +44,17 @@ export const fetchProductById = (productId) => async (dispatch) => {
   try {
     dispatch(fetchProductsStart());
     const response = await api.get(`/products/${productId}`);
-    dispatch(setSelectedProduct(response.data));
-    return response.data;
+    const product = response.data;
+    
+    dispatch(fetchProductsSuccess({
+      products: [product],
+      total: 1,
+      limit: 1,
+      offset: 0
+    }));
+    return product;
   } catch (error) {
-    const errorMessage = error.response?.data?.message || 'Failed to fetch product';
+    const errorMessage = error.response?.data?.message || 'Ürün yüklenirken bir hata oluştu';
     dispatch(fetchProductsFailure(errorMessage));
     throw error;
   }
@@ -39,7 +62,8 @@ export const fetchProductById = (productId) => async (dispatch) => {
 
 // Clear selected product
 export const clearProduct = () => (dispatch) => {
-  dispatch(clearSelectedProduct());
+  // No changes made to this function
+  // dispatch(clearSelectedProduct()); // This line was removed
 };
 
 // Fetch products by category
@@ -47,10 +71,19 @@ export const fetchProductsByCategory = (categoryId, params = {}) => async (dispa
   try {
     dispatch(fetchProductsStart());
     const response = await api.get(`/categories/${categoryId}/products`, { params });
-    dispatch(fetchProductsSuccess(response.data));
-    return response.data;
+    
+    const products = response.data.products || [];
+    const total = response.data.total_count || products.length;
+    
+    dispatch(fetchProductsSuccess({
+      products,
+      total,
+      limit: params.limit || 25,
+      offset: params.offset || 0
+    }));
+    return products;
   } catch (error) {
-    const errorMessage = error.response?.data?.message || 'Failed to fetch products by category';
+    const errorMessage = error.response?.data?.message || 'Kategori ürünleri yüklenirken bir hata oluştu';
     dispatch(fetchProductsFailure(errorMessage));
     throw error;
   }

@@ -4,7 +4,13 @@ const initialState = {
   products: [],
   selectedProduct: null,
   loading: false,
-  error: null
+  error: null,
+  pagination: {
+    total: 0,
+    limit: 25,
+    offset: 0,
+    currentPage: 1
+  }
 };
 
 const productSlice = createSlice({
@@ -17,8 +23,13 @@ const productSlice = createSlice({
     },
     fetchProductsSuccess: (state, action) => {
       state.loading = false;
-      state.products = action.payload;
-      state.error = null;
+      state.products = action.payload.products;
+      state.pagination = {
+        total: action.payload.total,
+        limit: action.payload.limit,
+        offset: action.payload.offset,
+        currentPage: Math.floor(action.payload.offset / action.payload.limit) + 1
+      };
     },
     fetchProductsFailure: (state, action) => {
       state.loading = false;
@@ -26,6 +37,8 @@ const productSlice = createSlice({
     },
     setSelectedProduct: (state, action) => {
       state.selectedProduct = action.payload;
+      state.loading = false;
+      state.error = null;
     },
     clearSelectedProduct: (state) => {
       state.selectedProduct = null;

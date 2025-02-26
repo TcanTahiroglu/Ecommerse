@@ -2,9 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   categories: [],
+  topCategories: [],
   loading: false,
-  error: null,
-  lastFetched: null
+  error: null
 };
 
 const categorySlice = createSlice({
@@ -17,30 +17,36 @@ const categorySlice = createSlice({
     },
     fetchCategoriesSuccess: (state, action) => {
       state.loading = false;
-      // Ensure we always store an array
-      state.categories = Array.isArray(action.payload) ? action.payload : [];
+      // API'den gelen veriyi düzenle
+      const formattedCategories = action.payload.map(category => ({
+        id: category.id,
+        name: category.title,
+        code: category.code,
+        gender: category.gender,
+        rating: category.rating,
+        image: category.img
+      }));
+      
+      state.categories = formattedCategories;
+      state.topCategories = [...formattedCategories]
+        .filter(cat => cat && cat.rating)
+        .sort((a, b) => (b.rating || 0) - (a.rating || 0))
+        .slice(0, 5);
       state.error = null;
-      state.lastFetched = new Date().toISOString();
     },
     fetchCategoriesFailure: (state, action) => {
       state.loading = false;
       state.error = action.payload;
       state.categories = [];
-    },
-    clearCategories: (state) => {
-      state.categories = [];
-      state.error = null;
-      state.loading = false;
-      state.lastFetched = null;
+      state.topCategories = [];
     }
   }
 });
 
-export const {
-  fetchCategoriesStart,
-  fetchCategoriesSuccess,
-  fetchCategoriesFailure,
-  clearCategories
+export const { 
+  fetchCategoriesStart, 
+  fetchCategoriesSuccess, 
+  fetchCategoriesFailure 
 } = categorySlice.actions;
 
 export default categorySlice.reducer;

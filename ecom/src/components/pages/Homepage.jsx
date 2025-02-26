@@ -1,15 +1,15 @@
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import HeroSlider from '../layout/HeroSlider';
+import TopCategories from '../TopCategories';
 import CategoryPick from "../layout/CategoryPick";
-import HeroSlider from "../layout/HeroSlider";
 import ProductCategory from "../layout/ProductCategory";
 import Slider from "../layout/slider";
 import C2A from "../layout/c2a";
 import FeaturedPost from "../layout/FeaturedPost";
-import TopCategories from "../TopCategories";
 import { fetchCategories } from "../../store/actions/categoryActions";
 
-const HomePage = () => {
+const Homepage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -29,4 +29,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default Homepage;
