@@ -13,6 +13,44 @@ const api = axios.create({
   }
 });
 
+// Add request interceptor
+api.interceptors.request.use(
+  (config) => {
+    console.log('Request Config:', {
+      url: config.url,
+      method: config.method,
+      headers: config.headers,
+      data: config.data
+    });
+    return config;
+  },
+  (error) => {
+    console.error('Request Error:', error);
+    return Promise.reject(error);
+  }
+);
+
+// Add response interceptor
+api.interceptors.response.use(
+  (response) => {
+    console.log('Response:', {
+      status: response.status,
+      data: response.data,
+      headers: response.headers
+    });
+    return response;
+  },
+  (error) => {
+    console.error('Response Error:', {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+      statusText: error.response?.statusText
+    });
+    return Promise.reject(error);
+  }
+);
+
 const SignupForm = () => {
   const { register, handleSubmit, watch, formState: { errors }, setError } = useForm({
     defaultValues: {
@@ -38,34 +76,102 @@ const SignupForm = () => {
 
   const onSubmit = async (data) => {
     setLoading(true);
+    console.log("%cForm Data:", "color: blue; font-weight: bold", {
+      raw_data: data,
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      role_id: data.role_id,
+      store_data: data.role_id === "2" ? {
+        name: data.store_name,
+        phone: data.store_phone,
+        tax_no: data.store_tax_no,
+        bank_account: data.store_bank_account
+      } : null
+    });
+    
     try {
+      // Validate required fields
+      if (!data.name || !data.email || !data.password) {
+        throw new Error("Name, email and password are required");
+      }
+
+      // Basic email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(data.email)) {
+        throw new Error("Please enter a valid email address");
+      }
+
       // Prepare the submission data
       const submissionData = {
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        role_id: Number(data.role_id)
+        name: data.name.trim(), 
+        email: data.email.trim().toLowerCase(),
+        password: data.password.replace(/[^a-zA-Z0-9]/g, ''), // Sadece alfanumerik karakterler
+        role_id: 1
       };
 
       // Add store data if role is store
-      if (data.role_id === "2") { // Assuming 2 is the store role ID
+      if (data.role_id === "2") {
+        if (!data.store_name || !data.store_phone || !data.store_tax_no || !data.store_bank_account) {
+          throw new Error("All store fields are required for store registration");
+        }
+
         submissionData.store = {
-          name: data.store_name,
-          phone: "+90" + data.store_phone.replace(/\D/g, ''),
-          tax_no: data.store_tax_no,
-          bank_account: "TR" + data.store_bank_account.replace(/\D/g, '')
+          name: data.store_name.trim(),
+          phone: data.store_phone.replace(/\D/g, ''), // Sadece rakamları al
+          tax_no: data.store_tax_no.trim(),
+          bank_account: data.store_bank_account.replace(/\D/g, '') // Sadece rakamları al
         };
+
+        // Store için role_id'yi 2 yapalım
+        submissionData.role_id = 2;
       }
 
-      console.log("Submitting data:", submissionData);
+      // API isteğini yapmadan önce validasyonlar
+      if (!submissionData.name || !submissionData.email || !submissionData.password) {
+        throw new Error("Name, email and password cannot be empty");
+      }
 
-      const response = await api.post("/signup", submissionData);
+      if (submissionData.password.length < 6) {
+        throw new Error("Password must be at least 6 characters long");
+      }
+
+      // API isteğini yapmadan önce veriyi string'e çevirelim
+      const requestData = JSON.stringify(submissionData);
+      console.log("%cSubmitting to API:", "color: green; font-weight: bold", {
+        raw: requestData,
+        parsed: submissionData
+      });
+
+      const response = await api.post("/signup", requestData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      });
+      console.log("%cAPI Response:", "color: green; font-weight: bold", response.data);
+      
       toast.success("You need to click the link in the email to activate your account!");
-      navigate(-1); // Redirect to previous page
+      navigate(-1);
     } catch (error) {
-      console.error("Signup error:", error.response?.data);
+      // If it's our validation error
+      if (error.message && !error.response) {
+        console.error("%cValidation Error:", "color: red; font-weight: bold", error.message);
+        toast.error(error.message);
+        return;
+      }
+
+      // If it's an API error
+      console.error("%cAPI Error Details:", "color: red; font-weight: bold", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        request_data: error.config?.data
+      });
+      
       const errorMessage = error.response?.data?.message || "Registration failed";
-      toast.error(errorMessage);
+      toast.error(`Registration failed: ${errorMessage}`);
     } finally {
       setLoading(false);
     }

@@ -1,11 +1,23 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { FaSearch, FaShoppingCart, FaUser, FaBars } from "react-icons/fa";
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { FaSearch, FaShoppingCart, FaUser, FaBars, FaSignOutAlt } from "react-icons/fa";
+import { logout } from '../../store/reducers/userSlice';
 import CategoryDropdown from '../CategoryDropdown';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isAuthenticated = useSelector(state => state.user.isAuthenticated);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    setIsProfileMenuOpen(false);
+    navigate('/');
+  };
 
   return (
     <header className="w-full bg-white shadow-md">
@@ -61,9 +73,55 @@ const Header = () => {
           <Link to="/cart" className="p-2 text-gray-600 hover:text-gray-900">
             <FaShoppingCart size={20} />
           </Link>
-          <Link to="/profile" className="p-2 text-gray-600 hover:text-gray-900">
-            <FaUser size={20} />
-          </Link>
+          <div className="relative">
+            <button
+              onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+              className="p-2 text-gray-600 hover:text-gray-900"
+            >
+              <FaUser size={20} />
+            </button>
+            
+            {/* Profile Dropdown Menu */}
+            {isProfileMenuOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                {isAuthenticated ? (
+                  <>
+                    <Link
+                      to="/profile"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => setIsProfileMenuOpen(false)}
+                    >
+                      Profile
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      <FaSignOutAlt className="mr-2" />
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to="/login"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => setIsProfileMenuOpen(false)}
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      to="/signup"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => setIsProfileMenuOpen(false)}
+                    >
+                      Sign Up
+                    </Link>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Mobile Menu */}
@@ -99,37 +157,45 @@ const Header = () => {
               >
                 Contact
               </Link>
-              <div className="flex space-x-4 px-4 py-2">
-                <button
-                  onClick={() => setIsSearchOpen(!isSearchOpen)}
-                  className="text-gray-600 hover:text-gray-900"
-                >
-                  <FaSearch size={20} />
-                </button>
-                <Link to="/cart" className="text-gray-600 hover:text-gray-900">
-                  <FaShoppingCart size={20} />
-                </Link>
-                <Link to="/profile" className="text-gray-600 hover:text-gray-900">
-                  <FaUser size={20} />
-                </Link>
-              </div>
+              {isAuthenticated ? (
+                <>
+                  <Link
+                    to="/profile"
+                    className="text-gray-600 hover:text-gray-900 px-4 py-2"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setIsMenuOpen(false);
+                    }}
+                    className="flex items-center text-gray-600 hover:text-gray-900 px-4 py-2"
+                  >
+                    <FaSignOutAlt className="mr-2" />
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    className="text-gray-600 hover:text-gray-900 px-4 py-2"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="text-gray-600 hover:text-gray-900 px-4 py-2"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
             </nav>
-          </div>
-        )}
-
-        {/* Search Overlay */}
-        {isSearchOpen && (
-          <div className="absolute top-full left-0 right-0 bg-white shadow-md p-4">
-            <div className="max-w-3xl mx-auto flex">
-              <input
-                type="text"
-                placeholder="Search products..."
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-l focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button className="px-6 py-2 bg-blue-600 text-white rounded-r hover:bg-blue-700">
-                Search
-              </button>
-            </div>
           </div>
         )}
       </div>
