@@ -1,9 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+// localStorage veya sessionStorage'dan token ve user bilgisini al
+const getStoredToken = () => {
+  return localStorage.getItem('token') || sessionStorage.getItem('token') || null;
+};
+
+const getStoredUser = () => {
+  const localUser = localStorage.getItem('user');
+  const sessionUser = sessionStorage.getItem('user');
+  if (localUser) return JSON.parse(localUser);
+  if (sessionUser) return JSON.parse(sessionUser);
+  return null;
+};
+
 const initialState = {
-  user: null,
-  token: localStorage.getItem('token') || null,
-  isAuthenticated: false,
+  user: getStoredUser(),
+  token: getStoredToken(),
+  isAuthenticated: !!getStoredToken(),
   loading: false,
   error: null
 };
@@ -34,7 +47,11 @@ const userSlice = createSlice({
       state.token = null;
       state.isAuthenticated = false;
       state.error = null;
+      // Her iki storage'dan da temizle
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      sessionStorage.removeItem('token');
+      sessionStorage.removeItem('user');
     }
   }
 });

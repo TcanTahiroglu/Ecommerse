@@ -12,8 +12,8 @@ import TeamPage from './components/pages/Teampage';
 
 function App() {
   return (
-    <PageLayout>
-      <Routes>
+    <Routes>
+      <Route element={<PageLayout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/shop" element={<ShopPage />} />
         <Route path="/shop/:gender/:categoryName/:categoryId" element={<ShopPage />} />
@@ -23,8 +23,8 @@ function App() {
         <Route path="/teams" element={<TeamPage />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signup" element={<SignupForm />} />
-      </Routes>
-    </PageLayout>
+      </Route>
+    </Routes>
   );
 }
 

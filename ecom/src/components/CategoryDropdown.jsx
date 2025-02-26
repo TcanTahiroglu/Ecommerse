@@ -1,15 +1,17 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { fetchCategories } from '../store/actions/categoryActions';
+import { useSelector } from 'react-redux';
 
 const CategoryDropdown = () => {
-  const dispatch = useDispatch();
-  const { categories } = useSelector((state) => state.categories);
+  const { categories, loading, error } = useSelector((state) => state.categories);
 
-  useEffect(() => {
-    dispatch(fetchCategories());
-  }, [dispatch]);
+  if (loading) {
+    return <div className="p-4">Loading categories...</div>;
+  }
+
+  if (error) {
+    return <div className="p-4 text-red-500">Error loading categories</div>;
+  }
 
   // Kategorileri cinsiyete göre grupla
   const womenCategories = categories.filter(cat => cat.gender === 'k');
@@ -24,7 +26,7 @@ const CategoryDropdown = () => {
             {womenCategories.map((category) => (
               <li key={category.id}>
                 <Link
-                  to={`/shop/kadin/${category.code.toLowerCase()}/${category.id}`}
+                  to={`/shop/kadin/${category.code}/${category.id}`}
                   className="text-gray-600 hover:text-blue-600"
                 >
                   {category.name}
@@ -40,7 +42,7 @@ const CategoryDropdown = () => {
             {menCategories.map((category) => (
               <li key={category.id}>
                 <Link
-                  to={`/shop/erkek/${category.code.toLowerCase()}/${category.id}`}
+                  to={`/shop/erkek/${category.code}/${category.id}`}
                   className="text-gray-600 hover:text-blue-600"
                 >
                   {category.name}

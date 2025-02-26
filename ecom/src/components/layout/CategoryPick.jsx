@@ -1,82 +1,78 @@
-import React from "react";
-import data from "../../data.json";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const CategoryPick = () => {
-  const { colors } = data;
-
   return (
-    <div className="cat category-pick flex flex-col justify-center items-center mt-8">
-      {/* Başlıklar */}
-      <h2 className="text-3xl font-bold text-gray-900">EDITOR’S PICK</h2>
-      <p className="text-gray-600 mt-2 mb-6">
-        Problems trying to resolve the conflict between
-      </p>
-
-      <div className="grid grid-cols-3 gap-4 pr-5 md:grid-cols-4">
-        {/* Men */}
-        <div className="relative">
-          <img
-            src="/images/dummy_510x500.png"
-            alt="Men"
-            className="w-full h-[500px] object-cover"
-          />
-          <button
-            className="absolute bottom-0 left-0 w-full py-2 text-white hover:bg-secondary"
-            style={{ backgroundColor: colors.tertiary }}
-          >
-            Men
-          </button>
-        </div>
-
-        {/* Women */}
-        <div className="relative">
-          <img
-            src="/images/dummy_240x500.png"
-            alt="Women"
-            className="w-full h-[500px] object-cover"
-          />
-          <button
-            className="absolute bottom-0 left-0 w-full py-2 text-white hover:bg-secondary"
-            style={{ backgroundColor: colors.tertiary }}
-          >
-            Women
-          </button>
-        </div>
-
-        {/* Accessories ve Kids (Üst Üste) */}
-        <div className="flex flex-col gap-4 col-span-2 md:col-span-1">
-          {/* Accessories */}
-          <div className="relative">
-            <img
-              src="/images/dummy_240x242.png"
-              alt="Accessories"
-              className="w-full h-[240px] object-cover"
-            />
-            <button
-              className="absolute bottom-0 left-0 w-full py-2 text-white hover:bg-secondary"
-              style={{ backgroundColor: colors.tertiary }}
-            >
-              Accessories
-            </button>
+    <section className="py-16">
+      <div className="container mx-auto px-4">
+        <h2 className="text-3xl font-bold text-center mb-2">EDITOR'S PICK</h2>
+        <p className="text-gray-600 text-center mb-8">Problems trying to resolve the conflict between</p>
+        
+        <div className="grid grid-cols-12 gap-4">
+          {/* Men Category - Büyük görsel */}
+          <div className="col-span-12 md:col-span-6 relative group">
+            <Link to="/shop/men" className="block h-[500px] overflow-hidden">
+              <img 
+                src="https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+                alt="Men's Fashion"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+              <div className="absolute bottom-6 left-6">
+                <span className="bg-white px-6 py-2 text-lg font-semibold">MEN</span>
+              </div>
+            </Link>
           </div>
 
-          {/* Kids */}
-          <div className="relative">
-            <img
-              src="/images/dummy_240x242.png"
-              alt="Kids"
-              className="w-full h-[240px] object-cover"
-            />
-            <button
-              className="absolute bottom-0 left-0 w-full py-2 text-white hover:bg-secondary"
-              style={{ backgroundColor: colors.tertiary }}
-            >
-              Kids
-            </button>
+          {/* Women ve Accessories/Kids - Sağ taraf */}
+          <div className="col-span-12 md:col-span-6 grid grid-rows-2 gap-4">
+            {/* Women Category */}
+            <div className="relative group">
+              <Link to="/shop/women" className="block h-[240px] overflow-hidden">
+                <img 
+                  src="https://images.pexels.com/photos/1462637/pexels-photo-1462637.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+                  alt="Women's Fashion"
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+                <div className="absolute bottom-6 left-6">
+                  <span className="bg-white px-6 py-2 text-lg font-semibold">WOMEN</span>
+                </div>
+              </Link>
+            </div>
+
+            {/* Accessories ve Kids - Alt sıra */}
+            <div className="grid grid-cols-2 gap-4">
+              {/* Accessories Category */}
+              <div className="relative group">
+                <Link to="/shop/accessories" className="block h-[240px] overflow-hidden">
+                  <img 
+                    src="https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+                    alt="Accessories"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute bottom-6 left-6">
+                    <span className="bg-white px-6 py-2 text-lg font-semibold">ACCESSORIES</span>
+                  </div>
+                </Link>
+              </div>
+
+              {/* Kids Category */}
+              <div className="relative group">
+                <Link to="/shop/kids" className="block h-[240px] overflow-hidden">
+                  <img 
+                    src="https://images.pexels.com/photos/1620760/pexels-photo-1620760.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+                    alt="Kids Fashion"
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute bottom-6 left-6">
+                    <span className="bg-white px-6 py-2 text-lg font-semibold">KIDS</span>
+                  </div>
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

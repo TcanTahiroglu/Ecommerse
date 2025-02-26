@@ -1,13 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { Outlet } from 'react-router-dom';
 import Header from './header';
 import Footer from './footer';
+import { fetchCategories } from '../../store/actions/categoryActions';
 
-const PageLayout = ({ children }) => {
+const PageLayout = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // Kategorileri yükle
+    dispatch(fetchCategories());
+  }, [dispatch]);
+
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-1 flex flex-col">
-        {children}
+      <main className="flex-grow">
+        <Outlet />
       </main>
       <Footer />
     </div>
