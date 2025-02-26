@@ -39,8 +39,8 @@ function App() {
         <Route path="/teams" element={<TeamPage />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signup" element={<SignupForm />} />
-      </Route>
-    </Routes>
+      </Routes>
+    </PageLayout>
   );
 }
 
