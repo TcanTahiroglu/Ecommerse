@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaHeart, FaShoppingCart, FaSearch, FaPhoneAlt, FaEnvelope, FaFacebookF, FaInstagram, FaTwitter, FaYoutube, FaUser, FaSignOutAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../store/reducers/userSlice";
+import { fetchCategories } from "../../store/actions/categoryActions";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
   const user = useSelector((state) => state.user.user);
+  const { categories, loading, error } = useSelector((state) => state.categories);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -19,6 +25,10 @@ const Header = () => {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  // Kategorileri cinsiyete göre ayır
+  const womenCategories = categories.filter(cat => cat.gender === 'k');
+  const menCategories = categories.filter(cat => cat.gender === 'e');
 
   return (
     <header className="fixed top-0 left-0 right-0 bg-white z-50 shadow-sm">
@@ -62,6 +72,53 @@ const Header = () => {
           <nav className={`lg:flex items-center space-x-6 ${isMenuOpen ? 'block' : 'hidden'}`}>
             <Link to="/" className="text-[#737373] hover:text-[#23A6F0]">Home</Link>
             <Link to="/shop" className="text-[#737373] hover:text-[#23A6F0]">Shop</Link>
+            <div className="relative group">
+              <button className="text-[#737373] hover:text-[#23A6F0] flex items-center">
+                Kategoriler
+                <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div className="absolute left-0 mt-2 w-[400px] bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                <div className="p-6">
+                  <div className="grid grid-cols-2 gap-8">
+                    {/* Kadın Kategorileri */}
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4 text-[#23A6F0]">Kadın</h3>
+                      <ul className="space-y-2">
+                        {womenCategories.map((category) => (
+                          <li key={category.id}>
+                            <Link
+                              to={`/shop/kadin/${category.code.split(':')[1]}/${category.id}`}
+                              className="block text-gray-600 hover:text-[#23A6F0] transition-colors"
+                            >
+                              {category.title}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    
+                    {/* Erkek Kategorileri */}
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4 text-[#23A6F0]">Erkek</h3>
+                      <ul className="space-y-2">
+                        {menCategories.map((category) => (
+                          <li key={category.id}>
+                            <Link
+                              to={`/shop/erkek/${category.code.split(':')[1]}/${category.id}`}
+                              className="block text-gray-600 hover:text-[#23A6F0] transition-colors"
+                            >
+                              {category.title}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <Link to="/about" className="text-[#737373] hover:text-[#23A6F0]">About</Link>
             <Link to="/blog" className="text-[#737373] hover:text-[#23A6F0]">Blog</Link>
             <Link to="/contact" className="text-[#737373] hover:text-[#23A6F0]">Contact</Link>

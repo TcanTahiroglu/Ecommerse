@@ -1,18 +1,22 @@
-import api from '../../utils/api';
-import {
-  fetchCategoriesStart,
-  fetchCategoriesSuccess,
-  fetchCategoriesFailure
+import axios from 'axios';
+import { 
+  setCategoriesLoading,
+  setCategoriesSuccess,
+  setCategoriesError 
 } from '../reducers/categorySlice';
 
 export const fetchCategories = () => async (dispatch) => {
   try {
-    dispatch(fetchCategoriesStart());
-    const response = await api.get('/categories');
-    dispatch(fetchCategoriesSuccess(response.data));
+    dispatch(setCategoriesLoading());
+    
+    const { data } = await axios.get('/categories');
+    
+    dispatch(setCategoriesSuccess(data));
   } catch (error) {
-    const errorMessage = error.response?.data?.message || 'Failed to fetch categories';
-    dispatch(fetchCategoriesFailure(errorMessage));
-    throw error;
+    dispatch(setCategoriesError(
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    ));
   }
 };

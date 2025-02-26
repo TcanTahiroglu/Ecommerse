@@ -6,10 +6,10 @@ const initialState = {
   loading: false,
   error: null,
   pagination: {
-    total: 0,
-    limit: 25,
-    offset: 0,
-    currentPage: 1
+    currentPage: 1,
+    totalItems: 0,
+    itemsPerPage: 25,
+    hasMore: true
   }
 };
 
@@ -17,37 +17,44 @@ const productSlice = createSlice({
   name: 'products',
   initialState,
   reducers: {
-    fetchProductsStart: (state) => {
+    setProductsLoading: (state) => {
       state.loading = true;
       state.error = null;
     },
-    fetchProductsSuccess: (state, action) => {
+    setProductsSuccess: (state, action) => {
       state.loading = false;
       state.products = action.payload.products;
       state.pagination = {
         ...state.pagination,
-        total: action.payload.total || action.payload.products.length,
-        limit: action.payload.limit || state.pagination.limit,
-        offset: action.payload.offset || 0,
-        currentPage: Math.floor((action.payload.offset || 0) / (action.payload.limit || state.pagination.limit)) + 1
+        totalItems: action.payload.total,
+        hasMore: action.payload.total > state.pagination.itemsPerPage * state.pagination.currentPage
       };
-      state.error = null;
     },
-    fetchProductsFailure: (state, action) => {
+    setProductsError: (state, action) => {
       state.loading = false;
       state.error = action.payload;
-      state.products = [];
+    },
+    setCurrentPage: (state, action) => {
+      state.pagination.currentPage = action.payload;
+    },
+    appendProducts: (state, action) => {
+      state.loading = false;
+      state.products = [...state.products, ...action.payload.products];
       state.pagination = {
-        ...initialState.pagination
+        ...state.pagination,
+        totalItems: action.payload.total,
+        hasMore: action.payload.total > state.pagination.itemsPerPage * state.pagination.currentPage
       };
     }
-  }
+  },
 });
 
 export const { 
-  fetchProductsStart, 
-  fetchProductsSuccess, 
-  fetchProductsFailure 
+  setProductsLoading, 
+  setProductsSuccess, 
+  setProductsError, 
+  setCurrentPage,
+  appendProducts 
 } = productSlice.actions;
 
 export default productSlice.reducer;

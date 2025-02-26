@@ -1,52 +1,42 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { FETCH_CATEGORIES_REQUEST, FETCH_CATEGORIES_SUCCESS, FETCH_CATEGORIES_FAIL } from '../constants/categoryConstants';
 
 const initialState = {
   categories: [],
+  womenCategories: [],
+  menCategories: [],
   topCategories: [],
   loading: false,
-  error: null
+  error: null,
 };
 
 const categorySlice = createSlice({
   name: 'categories',
   initialState,
   reducers: {
-    fetchCategoriesStart: (state) => {
+    setCategoriesLoading: (state) => {
       state.loading = true;
       state.error = null;
     },
-    fetchCategoriesSuccess: (state, action) => {
+    setCategoriesSuccess: (state, action) => {
       state.loading = false;
-      // API'den gelen veriyi düzenle
-      const formattedCategories = action.payload.map(category => ({
-        id: category.id,
-        name: category.title,
-        code: category.code,
-        gender: category.gender,
-        rating: category.rating,
-        image: category.img
-      }));
+      state.categories = action.payload;
       
-      state.categories = formattedCategories;
-      state.topCategories = [...formattedCategories]
-        .filter(cat => cat && cat.rating)
-        .sort((a, b) => (b.rating || 0) - (a.rating || 0))
+      // Kadın ve erkek kategorilerini ayır
+      state.womenCategories = action.payload.filter(cat => cat.gender === 'k');
+      state.menCategories = action.payload.filter(cat => cat.gender === 'e');
+      
+      // En yüksek rating'e sahip 5 kategoriyi al
+      state.topCategories = [...action.payload]
+        .sort((a, b) => b.rating - a.rating)
         .slice(0, 5);
-      state.error = null;
     },
-    fetchCategoriesFailure: (state, action) => {
+    setCategoriesError: (state, action) => {
       state.loading = false;
       state.error = action.payload;
-      state.categories = [];
-      state.topCategories = [];
-    }
-  }
+    },
+  },
 });
 
-export const { 
-  fetchCategoriesStart, 
-  fetchCategoriesSuccess, 
-  fetchCategoriesFailure 
-} = categorySlice.actions;
-
+export const { setCategoriesLoading, setCategoriesSuccess, setCategoriesError } = categorySlice.actions;
 export default categorySlice.reducer;
