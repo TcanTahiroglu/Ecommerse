@@ -12,7 +12,7 @@ export const loginUser = (credentials, rememberMe = false) => async (dispatch) =
     };
 
     console.log('Login request:', loginData);
-    const response = await api.post('/auth/login', loginData);
+    const response = await api.post('/login', loginData);
     console.log('Login response:', response.data);
     
     const { token, user } = response.data;
