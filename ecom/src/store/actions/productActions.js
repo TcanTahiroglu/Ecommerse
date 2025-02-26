@@ -1,61 +1,69 @@
 // actions/productActions.js
 
-import api from '../../utils/api';
-import {
-  fetchProductsStart,
-  fetchProductsSuccess,
-  fetchProductsFailure
-} from '../reducers/productSlice';
+import axios from 'axios';
+import { 
+  FETCH_PRODUCTS_REQUEST, 
+  FETCH_PRODUCTS_SUCCESS, 
+  FETCH_PRODUCTS_FAILURE 
+} from '../constants/productConstants';
+
+// API URL'ini tanımlayalım
+const API_URL = 'https://workintech-fe-ecommerce.onrender.com';
+
+const axiosInstance = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
+});
 
 // Fetch all products with pagination and optional query parameters
-export const fetchProducts = (params = {}) => async (dispatch) => {
+export const fetchProducts = (limit = 25, offset = 0) => async (dispatch) => {
   try {
-    dispatch(fetchProductsStart());
-    // Set default pagination values if not provided
-    const paginatedParams = {
-      limit: params.limit || 25,
-      offset: params.offset || 0,
-      ...params
-    };
-    const response = await api.get('/products', { params: paginatedParams });
-    
-    // API yanıtını işle
-    const products = response.data.products || [];
-    
-    // Toplam ürün sayısını al
-    const total = response.data.total_count || products.length;
-    
-    dispatch(fetchProductsSuccess({
-      products,
-      total,
-      limit: paginatedParams.limit,
-      offset: paginatedParams.offset
-    }));
+    dispatch({ type: FETCH_PRODUCTS_REQUEST });
+
+    const { data } = await axiosInstance.get(`/products?limit=${limit}&offset=${offset}`);
+
+    dispatch({
+      type: FETCH_PRODUCTS_SUCCESS,
+      payload: {
+        products: data.products,
+        totalProducts: data.total,
+        limit,
+        offset
+      }
+    });
   } catch (error) {
-    console.error('API Error:', error);
-    const errorMessage = error.response?.data?.message || 'Ürünler yüklenirken bir hata oluştu';
-    dispatch(fetchProductsFailure(errorMessage));
-    throw error;
+    dispatch({
+      type: FETCH_PRODUCTS_FAILURE,
+      payload: error.message
+    });
   }
 };
 
 // Fetch a single product by ID
 export const fetchProductById = (productId) => async (dispatch) => {
   try {
-    dispatch(fetchProductsStart());
-    const response = await api.get(`/products/${productId}`);
+    dispatch({ type: FETCH_PRODUCTS_REQUEST });
+    const response = await axiosInstance.get(`/products/${productId}`);
     const product = response.data;
     
-    dispatch(fetchProductsSuccess({
-      products: [product],
-      total: 1,
-      limit: 1,
-      offset: 0
-    }));
+    dispatch({
+      type: FETCH_PRODUCTS_SUCCESS,
+      payload: {
+        products: [product],
+        totalProducts: 1,
+        limit: 1,
+        offset: 0
+      }
+    });
     return product;
   } catch (error) {
-    const errorMessage = error.response?.data?.message || 'Ürün yüklenirken bir hata oluştu';
-    dispatch(fetchProductsFailure(errorMessage));
+    dispatch({
+      type: FETCH_PRODUCTS_FAILURE,
+      payload: error.message
+    });
     throw error;
   }
 };
@@ -69,22 +77,27 @@ export const clearProduct = () => (dispatch) => {
 // Fetch products by category
 export const fetchProductsByCategory = (categoryId, params = {}) => async (dispatch) => {
   try {
-    dispatch(fetchProductsStart());
-    const response = await api.get(`/categories/${categoryId}/products`, { params });
+    dispatch({ type: FETCH_PRODUCTS_REQUEST });
+    const response = await axiosInstance.get(`/products/category/${categoryId}`);
     
-    const products = response.data.products || [];
-    const total = response.data.total_count || products.length;
+    const products = response.data || [];
+    const total = products.length;
     
-    dispatch(fetchProductsSuccess({
-      products,
-      total,
-      limit: params.limit || 25,
-      offset: params.offset || 0
-    }));
+    dispatch({
+      type: FETCH_PRODUCTS_SUCCESS,
+      payload: {
+        products,
+        totalProducts: total,
+        limit: params.limit || 25,
+        offset: params.offset || 0
+      }
+    });
     return products;
   } catch (error) {
-    const errorMessage = error.response?.data?.message || 'Kategori ürünleri yüklenirken bir hata oluştu';
-    dispatch(fetchProductsFailure(errorMessage));
+    dispatch({
+      type: FETCH_PRODUCTS_FAILURE,
+      payload: error.message
+    });
     throw error;
   }
 };

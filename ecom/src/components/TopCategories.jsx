@@ -7,7 +7,7 @@ const DEFAULT_IMAGE = 'https://placehold.co/300x400/e2e8f0/1e293b?text=Category'
 
 const TopCategories = () => {
   const dispatch = useDispatch();
-  const { categories, loading } = useSelector((state) => state.categories);
+  const { topCategories, loading } = useSelector((state) => state.categories);
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -22,7 +22,7 @@ const TopCategories = () => {
     </div>
   );
 
-  if (!categories || categories.length === 0) return (
+  if (!topCategories || topCategories.length === 0) return (
     <div className="py-12 bg-gray-50">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-8">Popüler Kategoriler</h2>
@@ -31,15 +31,12 @@ const TopCategories = () => {
     </div>
   );
 
-  // Ana kategorileri filtrele (parent_id olmayan kategoriler)
-  const mainCategories = categories.filter(category => !category.parent_id);
-
   return (
     <section className="py-12 bg-gray-50">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-8">Popüler Kategoriler</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-          {mainCategories.map((category) => (
+          {topCategories.map((category) => (
             <Link
               key={category.id}
               to={`/shop/${category.gender || 'all'}/${category.name?.toLowerCase() || 'category'}/${category.id}`}

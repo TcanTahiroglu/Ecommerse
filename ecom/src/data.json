@@ -40,10 +40,7 @@
       "subtitle": "Summer 2025",
       "description": "Discover the latest trends and be the first to wear the summer collection!",
       "buttonText": "Shop Now",
-      "images": [
-        "/images/dummy_1440x720.png",
-        "/images/dummy_1440x720.png"
-      ]
+      "images": "/dummy_1440x720.png"
     },
     {
       "id": 2,
@@ -51,10 +48,7 @@
       "subtitle": "Summer 2025",
       "description": "Step into summer with our exclusive collection of stylish outfits.",
       "buttonText": "Shop Now",
-      "images": [
-        "/images/1440x720.png",
-        "/images/1440x720.png"
-      ]
+      "images": "/dummy_1440x720.png"
     }
   ],
   "products": [

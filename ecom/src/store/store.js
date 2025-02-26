@@ -5,34 +5,26 @@ import categoryReducer from './reducers/categorySlice';
 import productReducer from './reducers/productReducer';
 import shoppingCartReducer from './reducers/shoppingCartReducer';
 
-// Create logger middleware
-const loggerMiddleware = process.env.NODE_ENV === 'development' ? createLogger() : null;
+const getMiddleware = () => {
+  const middlewares = [];
 
-// Define middleware array
-const middleware = (getDefaultMiddleware) => {
-  const middlewares = getDefaultMiddleware({
-    serializableCheck: {
-      ignoredActions: ['persist/PERSIST'],
-    },
-  });
-
-  // Only add logger in development
-  if (loggerMiddleware) {
-    middlewares.push(loggerMiddleware);
+  if (process.env.NODE_ENV === 'development') {
+    const logger = createLogger({
+      collapsed: true,
+    });
+    middlewares.push(logger);
   }
 
   return middlewares;
 };
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
     user: userReducer,
     categories: categoryReducer,
     products: productReducer,
-    shoppingCart: shoppingCartReducer,
+    shoppingCart: shoppingCartReducer
   },
-  middleware,
-  devTools: process.env.NODE_ENV !== 'production',
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(getMiddleware()),
 });
-
-export default store;

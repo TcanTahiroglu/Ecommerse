@@ -42,7 +42,7 @@ const Header = () => {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="md:hidden p-2"
           >
-            <FaBars size={24} />
+            {isMenuOpen ? <FaBars size={24} /> : <FaBars size={24} />}
           </button>
         </div>
 
@@ -76,62 +76,55 @@ const Header = () => {
 
         {/* Icons */}
         <div className="hidden md:flex items-center space-x-4">
-          <div className="flex items-center space-x-3">
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="p-2 text-gray-600 hover:text-gray-900"
-              >
-                <FaSearch size={20} />
-              </button>
-              {isAuthenticated && user && (
-                <span className="text-sm font-medium text-gray-700">
-                  {user.name || user.email.split('@')[0]}
-                </span>
-              )}
-            </div>
-            <Link to="/cart" className="p-2 text-gray-600 hover:text-gray-900">
-              <FaShoppingCart size={20} />
-            </Link>
-            <div className="relative">
-              <button
-                onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-                className="p-2 text-gray-600 hover:text-gray-900"
-              >
-                <FaUser size={20} />
-              </button>
-              {/* Profile Dropdown Menu */}
-              {isProfileMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                  {isAuthenticated ? (
-                    <button
-                      onClick={handleLogout}
+          <button
+            onClick={() => setIsSearchOpen(!isSearchOpen)}
+            className="p-2 text-gray-600 hover:text-gray-900"
+          >
+            <FaSearch size={20} />
+          </button>
+          <Link to="/cart" className="p-2 text-gray-600 hover:text-gray-900">
+            <FaShoppingCart size={20} />
+          </Link>
+          <div className="relative">
+            <button
+              onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+              className="flex items-center"
+            >
+              <FaUser className="text-xl" />
+              {isAuthenticated && user && <span className="ml-2">{user.name}</span>}
+            </button>
+            
+            {/* Profile Dropdown Menu */}
+            {isProfileMenuOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                {isAuthenticated ? (
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
+                  >
+                    <FaSignOutAlt className="inline-block mr-2" />
+                    Çıkış Yap
+                  </button>
+                ) : (
+                  <>
+                    <Link
+                      to="/login"
                       className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
+                      onClick={() => setIsProfileMenuOpen(false)}
                     >
-                      <FaSignOutAlt className="inline-block mr-2" />
-                      Çıkış Yap
-                    </button>
-                  ) : (
-                    <>
-                      <Link
-                        to="/login"
-                        className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
-                        onClick={() => setIsProfileMenuOpen(false)}
-                      >
-                        Giriş Yap
-                      </Link>
-                      <Link
-                        to="/signup"
-                        className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 border-t"
-                        onClick={() => setIsProfileMenuOpen(false)}
-                      >
-                        Üye Ol
-                      </Link>
-                    </>
-                  )}
-                </div>
-              )}
-            </div>
+                      Giriş Yap
+                    </Link>
+                    <Link
+                      to="/signup"
+                      className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 border-t"
+                      onClick={() => setIsProfileMenuOpen(false)}
+                    >
+                      Üye Ol
+                    </Link>
+                  </>
+                )}
+              </div>
+            )}
           </div>
         </div>
 

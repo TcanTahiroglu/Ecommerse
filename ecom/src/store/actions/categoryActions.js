@@ -8,11 +8,11 @@ import {
 export const fetchCategories = () => async (dispatch) => {
   try {
     dispatch(fetchCategoriesStart());
-    
     const response = await api.get('/categories');
     dispatch(fetchCategoriesSuccess(response.data));
   } catch (error) {
-    console.error('Category fetch error:', error.message);
-    dispatch(fetchCategoriesFailure('Failed to fetch categories'));
+    const errorMessage = error.response?.data?.message || 'Failed to fetch categories';
+    dispatch(fetchCategoriesFailure(errorMessage));
+    throw error;
   }
 };

@@ -1,39 +1,32 @@
-import React from 'react';
+import React from "react";
 
 const C2A = () => {
   return (
-    <section className="py-16 bg-white">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          {/* Left Side - Image */}
-          <div className="relative h-[400px] overflow-hidden rounded-lg">
-            <img
-              src="https://images.pexels.com/photos/4557876/pexels-photo-4557876.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-              alt="Happy couple in winter clothes"
-              className="w-full h-full object-cover"
-            />
-          </div>
+    <div className="flex flex-col md:flex-row items-center bg-gray-100 p-8 rounded-lg shadow-lg">
+      {/* Sol taraftaki görsel */}
+      <div className="w-full md:w-1/2">
+        <img src="/images/dummy_800x800.png" className="rounded-lg shadow-lg" />
+      </div>
 
-          {/* Right Side - Content */}
-          <div className="space-y-4">
-            <span className="text-sm text-gray-600">SUMMER 2020</span>
-            <h2 className="text-4xl font-bold text-gray-900">Part of the Neural Universe</h2>
-            <p className="text-gray-600">
-              We know how large objects will act,<br />
-              but things on a small scale.
-            </p>
-            <div className="flex gap-4 pt-4">
-              <button className="bg-[#2DC071] hover:bg-[#2AA563] text-white px-6 py-3 rounded transition-colors">
-                BUY NOW
-              </button>
-              <button className="border-2 border-[#2DC071] text-[#2DC071] hover:bg-[#2DC071] hover:text-white px-6 py-3 rounded transition-colors">
-                READ MORE
-              </button>
-            </div>
-          </div>
+      {/* Sağ taraftaki içerik */}
+      <div className="w-full md:w-1/2 text-center md:text-left px-6 mt-6 md:mt-0">
+        <h2 className="text-4xl font-bold text-gray-800">Summer 2020</h2>
+        <h3 className="text-2xl text-gray-600 mt-2">Part of the Universe</h3>
+        <p className="text-lg text-gray-500 mt-4">
+          Explore the latest trends that blend style with cosmic inspiration. Feel the energy of the universe in every outfit.
+        </p>
+
+        {/* Butonlar */}
+        <div className="mt-6 flex justify-center md:justify-start space-x-4">
+          <button className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg text-lg shadow">
+            Buy Now
+          </button>
+          <button className="bg-gray-800 hover:bg-gray-900 text-white px-6 py-2 rounded-lg text-lg shadow">
+            Read More
+          </button>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

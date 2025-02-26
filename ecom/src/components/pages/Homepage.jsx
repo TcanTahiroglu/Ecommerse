@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import HeroSlider from '../layout/HeroSlider';
+import TopCategories from '../TopCategories';
 import CategoryPick from "../layout/CategoryPick";
 import ProductCategory from "../layout/ProductCategory";
 import Slider from "../layout/slider";
@@ -18,6 +19,7 @@ const Homepage = () => {
   return (
     <div>
       <HeroSlider />
+      <TopCategories />
       <CategoryPick />
       <ProductCategory />
       <Slider />

@@ -5,14 +5,14 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
+    'Authorization': 'Bearer',
   },
 });
 
 // Add a request interceptor
 api.interceptors.request.use(
   (config) => {
-    // Önce localStorage'dan, yoksa sessionStorage'dan token'ı al
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -30,9 +30,6 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       // Handle unauthorized access
       localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      sessionStorage.removeItem('token');
-      sessionStorage.removeItem('user');
       window.location.href = '/login';
     }
     return Promise.reject(error);

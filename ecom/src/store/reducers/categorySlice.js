@@ -20,16 +20,16 @@ const categorySlice = createSlice({
       // API'den gelen veriyi düzenle
       const formattedCategories = action.payload.map(category => ({
         id: category.id,
-        name: category.name || category.title,
-        code: category.code || category.name?.toLowerCase().replace(/\s+/g, '-'),
-        gender: category.gender || 'u', // unisex varsayılan olarak
-        rating: category.rating || 0,
-        image: category.image || category.img
+        name: category.title,
+        code: category.code,
+        gender: category.gender,
+        rating: category.rating,
+        image: category.img
       }));
       
       state.categories = formattedCategories;
-      // En yüksek rating'e sahip 5 kategoriyi seç
       state.topCategories = [...formattedCategories]
+        .filter(cat => cat && cat.rating)
         .sort((a, b) => (b.rating || 0) - (a.rating || 0))
         .slice(0, 5);
       state.error = null;

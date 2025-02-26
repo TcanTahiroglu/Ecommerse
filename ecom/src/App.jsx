@@ -9,11 +9,12 @@ import ProductDetail from './components/pages/ProductDetail';
 import LoginForm from './components/pages/LoginForm';
 import SignupForm from './components/pages/SignupForm';
 import TeamPage from './components/pages/Teampage';
+import ProductList from './components/pages/ProductList';
 
 function App() {
   return (
-    <Routes>
-      <Route element={<PageLayout />}>
+    <PageLayout>
+      <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/shop" element={<ShopPage />} />
         <Route path="/shop/:gender/:categoryName/:categoryId" element={<ShopPage />} />
@@ -23,8 +24,14 @@ function App() {
         <Route path="/teams" element={<TeamPage />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signup" element={<SignupForm />} />
+<<<<<<< HEAD
+        <Route path="/products" element={<ProductList />} />
       </Route>
     </Routes>
+=======
+      </Routes>
+    </PageLayout>
+>>>>>>> parent of 6a04b81 (görsel biraz düzenlendi)
   );
 }
 
