@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   products: [],
+  currentProduct: null,
   loading: false,
   error: null,
   pagination: {
@@ -45,16 +46,36 @@ const productSlice = createSlice({
         totalItems: action.payload.total,
         hasMore: action.payload.total > state.pagination.itemsPerPage * state.pagination.currentPage
       };
+    },
+    // New reducers for single product
+    setCurrentProductLoading: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    setCurrentProductSuccess: (state, action) => {
+      state.loading = false;
+      state.currentProduct = action.payload;
+    },
+    setCurrentProductError: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    clearCurrentProduct: (state) => {
+      state.currentProduct = null;
     }
   },
 });
 
-export const { 
-  setProductsLoading, 
-  setProductsSuccess, 
-  setProductsError, 
+export const {
+  setProductsLoading,
+  setProductsSuccess,
+  setProductsError,
   setCurrentPage,
-  appendProducts 
+  appendProducts,
+  setCurrentProductLoading,
+  setCurrentProductSuccess,
+  setCurrentProductError,
+  clearCurrentProduct
 } = productSlice.actions;
 
 export default productSlice.reducer;

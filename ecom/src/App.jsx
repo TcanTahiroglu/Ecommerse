@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { verifyToken } from './store/actions/userActions';
 import PageLayout from './components/layout/PageLayout';
 import HomePage from './components/pages/Homepage';
-import ShopPage from './components/pages/Shoppage';
+import Shoppage from './components/pages/Shoppage';
 import AboutPage from './components/pages/AboutUs';
 import ContactPage from './components/pages/ContactPage';
 import ProductDetail from './components/pages/ProductDetail';
@@ -12,6 +12,9 @@ import LoginForm from './components/pages/LoginForm';
 import SignupForm from './components/pages/SignupForm';
 import TeamPage from './components/pages/Teampage';
 import ProductList from './components/pages/ProductList';
+import ShoppingCartPage from './components/pages/ShoppingCartPage';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const dispatch = useDispatch();
@@ -28,19 +31,34 @@ function App() {
   }, [dispatch]);
 
   return (
-    <PageLayout>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/shop" element={<ShopPage />} />
-        <Route path="/shop/:gender/:categoryName/:categoryId" element={<ShopPage />} />
-        <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/teams" element={<TeamPage />} />
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/signup" element={<SignupForm />} />
-      </Routes>
-    </PageLayout>
+    <>
+      <PageLayout>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/shop" element={<Shoppage />} />
+          <Route path="/shop/:gender/:categoryName/:categoryId" element={<Shoppage />} />
+          <Route path="/shop/:gender/:categoryName/:categoryId/:productNameSlug/:productId" element={<ProductDetail />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/teams" element={<TeamPage />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/signup" element={<SignupForm />} />
+          <Route path="/cart" element={<ShoppingCartPage />} />
+        </Routes>
+      </PageLayout>
+      <ToastContainer 
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+    </>
   );
 }
 

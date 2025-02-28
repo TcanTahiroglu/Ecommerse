@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { FaHeart, FaShoppingCart, FaSearch, FaPhoneAlt, FaEnvelope, FaFacebookF, FaInstagram, FaTwitter, FaYoutube, FaUser, FaSignOutAlt } from "react-icons/fa";
+import { FaHeart, FaShoppingCart, FaSearch, FaPhoneAlt, FaEnvelope, FaFacebookF, FaInstagram, FaTwitter, FaYoutube, FaUser, FaSignOutAlt, FaShoppingBag } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../store/reducers/userSlice";
 import { fetchCategories } from "../../store/actions/categoryActions";
+import { toggleCartDropdown } from "../../store/reducers/cartSlice";
+import CartDropdown from "../cart/CartDropdown";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
   const user = useSelector((state) => state.user.user);
   const { categories, loading, error } = useSelector((state) => state.categories);
+  const cart = useSelector((state) => state.cart.cart);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isOpen = useSelector((state) => state.cart.isOpen);
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -120,43 +124,71 @@ const Header = () => {
               </div>
             </div>
             <Link to="/about" className="text-[#737373] hover:text-[#23A6F0]">About</Link>
-            <Link to="/blog" className="text-[#737373] hover:text-[#23A6F0]">Blog</Link>
+            <Link to="/teams" className="text-[#737373] hover:text-[#23A6F0]">Team</Link>
             <Link to="/contact" className="text-[#737373] hover:text-[#23A6F0]">Contact</Link>
-            <Link to="/pages" className="text-[#737373] hover:text-[#23A6F0]">Pages</Link>
           </nav>
 
-          {/* User Actions */}
-          <div className="flex items-center space-x-6">
+          {/* Authentication & Icons */}
+          <div className="flex items-center">
+            {/* Auth Buttons */}
             <div className="flex items-center text-[#23A6F0]">
-              {isAuthenticated && user ? (
-                <div className="flex items-center space-x-4">
-                  <span className="text-[#252B42]">{user.name || user.email}</span>
-                  <FaUser className="text-[#23A6F0]" />
-                  <button
+              {isAuthenticated ? (
+                <>
+                  <div className="flex items-center mr-6">
+                    <FaUser className="mr-2" />
+                    <span>{user?.name || 'User'}</span>
+                  </div>
+                  <button 
                     onClick={handleLogout}
-                    className="flex items-center text-[#E74040] hover:text-[#E74040]/80"
+                    className="flex items-center text-[#E74040]"
                   >
-                    <FaSignOutAlt />
+                    <FaSignOutAlt className="mr-2" />
+                    <span>Logout</span>
                   </button>
-                </div>
+                </>
               ) : (
                 <>
-                  <Link to="/login" className="flex items-center hover:text-[#23A6F0]/80">
-                    <FaUser className="mr-2" />
-                    <span>Login</span>
+                  <Link to="/login" className="mr-4 hover:underline">
+                    Login
                   </Link>
-                  <span className="mx-2">/</span>
-                  <Link to="/signup" className="hover:text-[#23A6F0]/80">Register</Link>
+                  <Link to="/signup" className="hover:underline">
+                    Register
+                  </Link>
                 </>
               )}
             </div>
-            <div className="flex items-center space-x-4">
-              <Link to="/wishlist" className="text-[#23A6F0] hover:text-[#23A6F0]/80">
-                <FaHeart />
+            
+            {/* Icons */}
+            <div className="flex gap-4 ml-6">
+              <Link to="/search" className="text-[#23A6F0] hover:text-[#23A6F0]/80">
+                <FaSearch />
               </Link>
-              <Link to="/cart" className="text-[#23A6F0] hover:text-[#23A6F0]/80">
-                <FaShoppingCart />
+              <Link to="/favorites" className="text-[#23A6F0] hover:text-[#23A6F0]/80">
+                <FaHeart size={20} />
               </Link>
+              <div className="relative flex items-center space-x-4">
+                <Link
+                  to="/cart"
+                  className="text-[#23A6F0] hover:text-[#23A6F0]/80 cursor-pointer relative"
+                >
+                  <FaShoppingCart size={20} />
+                  {cart.length > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-[#E74040] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                      {cart.reduce((total, item) => total + item.count, 0)}
+                    </span>
+                  )}
+                </Link>
+                <div 
+                  className="text-[#23A6F0] hover:text-[#23A6F0]/80 cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    dispatch(toggleCartDropdown());
+                  }}
+                >
+                  <FaShoppingBag size={18} />
+                </div>
+                <CartDropdown />
+              </div>
             </div>
           </div>
 

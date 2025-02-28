@@ -1,0 +1,146 @@
+.product-detail-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.back-button {
+  background-color: transparent;
+  border: 1px solid #23A6F0;
+  color: #23A6F0;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #23A6F0;
+  color: white;
+}
+
+.product-detail-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.product-images {
+  display: grid;
+  gap: 1rem;
+}
+
+.main-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.thumbnail {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.thumbnail:hover {
+  opacity: 0.8;
+}
+
+.product-info {
+  padding: 1rem;
+}
+
+.product-name {
+  font-size: 2rem;
+  color: #252B42;
+  margin-bottom: 1rem;
+}
+
+.product-description {
+  color: #737373;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.product-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.rating {
+  display: flex;
+  gap: 1rem;
+  color: #737373;
+}
+
+.stock-info {
+  font-weight: 500;
+}
+
+.in-stock {
+  color: #2DC071;
+}
+
+.out-of-stock {
+  color: #E74040;
+}
+
+.price-section {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #252B42;
+}
+
+.add-to-cart-btn {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.add-to-cart-btn:hover {
+  opacity: 0.9;
+}
+
+.add-to-cart-btn:disabled {
+  background-color: #cccccc !important;
+  cursor: not-allowed;
+}
+
+.error-container,
+.not-found-container {
+  text-align: center;
+  padding: 3rem;
+}
+
+.error-message {
+  color: #E74040;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .product-detail-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .product-images {
+    order: -1;
+  }
+}
