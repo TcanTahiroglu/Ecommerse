@@ -42,6 +42,30 @@ const Shoppage = () => {
     { value: 'name:desc', label: 'İsim (Z-A)' },
   ];
 
+  // URL için isim oluşturma fonksiyonu
+  const slugify = (text) => {
+    return text
+      .toString()
+      .toLowerCase()
+      .replace(/\s+/g, '-')           // Boşlukları tire ile değiştir
+      .replace(/[^\w\-]+/g, '')       // Alfanümerik olmayan karakterleri kaldır
+      .replace(/\-\-+/g, '-')         // Birden fazla tireyi tek tire ile değiştir
+      .replace(/^-+/, '')             // Baştaki tireleri kaldır
+      .replace(/-+$/, '');            // Sondaki tireleri kaldır
+  };
+
+  // Ürün detay sayfasına yönlendirme fonksiyonu
+  const handleProductClick = (product) => {
+    if (!product || !product.id) return;
+    
+    const productNameSlug = slugify(product.name);
+    const genderPath = gender || 'all';
+    const catName = categoryName || 'all-products';
+    const catId = categoryId || 0;
+    
+    navigate(`/shop/${genderPath}/${catName}/${catId}/${productNameSlug}/${product.id}`);
+  };
+
   // Handle search input changes
   const handleSearchInputChange = (e) => {
     setSearchInputValue(e.target.value);
@@ -275,7 +299,11 @@ const Shoppage = () => {
         {products && products.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {products.map((product) => (
-              <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+              <div 
+                key={product.id} 
+                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer transform hover:-translate-y-1 transition-transform"
+                onClick={() => handleProductClick(product)}
+              >
                 <div className="relative pb-[100%]">
                   <img 
                     src={product.images && product.images.length > 0 ? product.images[0].url : 'https://placehold.co/600x400?text=No+Image'}
@@ -288,7 +316,7 @@ const Shoppage = () => {
                   />
                 </div>
                 <div className="p-4">
-                  <h3 className="text-lg font-semibold mb-2 line-clamp-2">{product.name}</h3>
+                  <h3 className="text-lg font-semibold mb-2 line-clamp-2 text-gray-800 hover:text-[#23A6F0]">{product.name}</h3>
                   <p className="text-gray-600 mb-2 text-sm line-clamp-2">{product.description}</p>
                   <div className="flex justify-between items-center mt-4">
                     <span className="text-xl font-bold text-[#23A6F0]">
@@ -296,7 +324,10 @@ const Shoppage = () => {
                     </span>
                     <button 
                       className="bg-[#2DC071] text-white px-4 py-2 rounded hover:bg-[#25A862] transition-colors"
-                      onClick={() => handleAddToCart(product)}
+                      onClick={(e) => {
+                        e.stopPropagation(); // Tıklama olayının üst elemana (karta) yayılmasını engelle
+                        handleAddToCart(product);
+                      }}
                     >
                       Add to Cart
                     </button>

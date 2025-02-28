@@ -75,9 +75,12 @@ export const loadMoreProducts = (params = {}) => async (dispatch) => {
 export const fetchProductById = (productId) => async (dispatch) => {
   try {
     dispatch(setCurrentProductLoading());
+    console.log(`Ürün detayları getiriliyor: /products/${productId}`);
     const { data } = await axios.get(`/products/${productId}`);
+    console.log('Alınan ürün detayları:', data);
     dispatch(setCurrentProductSuccess(data));
   } catch (error) {
+    console.error('Ürün detayları alınırken hata:', error);
     dispatch(setCurrentProductError(
       error.response && error.response.data.message
         ? error.response.data.message

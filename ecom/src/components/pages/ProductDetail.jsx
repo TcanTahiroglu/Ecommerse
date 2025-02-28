@@ -9,17 +9,20 @@ import LoadingSpinner from "../common/LoadingSpinner";
 import "../../styles/ProductDetail.css";
 
 const ProductDetail = () => {
-  const { productId } = useParams(); // URL'den productId'yi alıyoruz
+  // URL'den tüm parametreleri alıyoruz
+  const { productId, gender, categoryName, categoryId, productNameSlug } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   
   const { currentProduct: product, loading, error } = useSelector((state) => state.products);
 
   useEffect(() => {
+    // Ürün ID'si varsa ürünü yükle
     if (productId) {
       dispatch(fetchProductById(productId));
     }
     
+    // Component unmount olduğunda ürünü temizle
     return () => {
       dispatch(clearProduct());
     };
@@ -31,9 +34,6 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     try {
-      console.log('ProductDetail - Sepete eklenen ürün:', product);
-      console.log('ProductDetail - Ürün ID:', product.id);
-      
       if (!product || !product.id) {
         toast.error('Geçersiz ürün verisi. Sepete eklenemiyor.');
         console.error('Geçersiz ürün verisi:', product);
@@ -64,27 +64,50 @@ const ProductDetail = () => {
 
   if (error) {
     return (
-      <div className="error-container">
-        <p className="error-message">{error}</p>
-        <button onClick={handleBack} className="back-button">Go Back</button>
+      <div className="container mx-auto py-10 px-4 text-center">
+        <p className="text-red-500 text-lg mb-4">{error}</p>
+        <button 
+          onClick={handleBack} 
+          className="back-button flex items-center justify-center mx-auto"
+        >
+          <span>← Geri Dön</span>
+        </button>
       </div>
     );
   }
 
   if (!product) {
     return (
-      <div className="not-found-container">
-        <p>Product not found! Please check the product ID.</p>
-        <button onClick={handleBack} className="back-button">Go Back</button>
+      <div className="container mx-auto py-10 px-4 text-center">
+        <p className="text-gray-700 text-lg mb-4">Ürün bulunamadı! Lütfen ürün ID'sini kontrol edin.</p>
+        <button 
+          onClick={handleBack} 
+          className="back-button flex items-center justify-center mx-auto"
+        >
+          <span>← Geri Dön</span>
+        </button>
       </div>
     );
   }
 
   return (
     <div className="product-detail-container">
-      <button onClick={handleBack} className="back-button">
-        ← Back
-      </button>
+      <div className="flex items-center mb-6">
+        <button onClick={handleBack} className="back-button flex items-center">
+          <span>←</span>
+          <span className="ml-2">Geri Dön</span>
+        </button>
+        
+        <div className="breadcrumbs ml-4 text-sm text-gray-500">
+          <span>Anasayfa</span>
+          <span className="mx-2">/</span>
+          <span>{gender === 'k' ? 'Kadın' : gender === 'e' ? 'Erkek' : 'Ürünler'}</span>
+          <span className="mx-2">/</span>
+          <span>{categoryName || 'Tüm Ürünler'}</span>
+          <span className="mx-2">/</span>
+          <span className="text-[#23A6F0]">{product.name}</span>
+        </div>
+      </div>
       
       <div className="product-detail-content">
         <div className="product-images">
@@ -92,7 +115,7 @@ const ProductDetail = () => {
             <img 
               key={index}
               src={image.url} 
-              alt={`${product.name} - View ${index + 1}`}
+              alt={`${product.name} - Görünüm ${index + 1}`}
               className={index === 0 ? "main-image" : "thumbnail"}
               onError={(e) => {
                 e.target.src = 'https://placehold.co/600x400?text=No+Image';
@@ -104,17 +127,17 @@ const ProductDetail = () => {
 
         <div className="product-info">
           <h1 className="product-name">{product.name}</h1>
-          <p className="product-description">{product.description || "No description available."}</p>
+          <p className="product-description">{product.description || "Açıklama bulunamadı."}</p>
           
           <div className="product-stats">
             <div className="rating">
-              <span>Rating: {product.rating}/5</span>
-              <span>({product.sell_count} sold)</span>
+              <span>Puanı: {product.rating}/5</span>
+              <span>({product.sell_count} satış)</span>
             </div>
             
             <div className="stock-info">
               <span className={product.stock > 0 ? "in-stock" : "out-of-stock"}>
-                {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
+                {product.stock > 0 ? `${product.stock} adet stokta` : "Stokta yok"}
               </span>
             </div>
           </div>
@@ -124,7 +147,6 @@ const ProductDetail = () => {
             <button 
               className="add-to-cart-btn"
               disabled={product.stock === 0}
-              style={{ backgroundColor: "#2DC071", color: "white", padding: "10px 20px", borderRadius: "4px", border: "none", cursor: "pointer" }}
               onClick={handleAddToCart}
             >
               Sepete Ekle
